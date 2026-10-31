@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dosen-Dex: Monster-Sammlung</title>
+<style>
+:root{--bg:#f2f4ee;--sf:#fff;--tx:#161a14;--mu:#667060;--ac:#4a9a00;--acx:#fff;--ln:#d9ded2;--st:#e0a800;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12150f;--sf:#1c211a;--tx:#eef2e8;--mu:#97a38f;--ac:#8dff1f;--acx:#10200a;--ln:#2e362a;--st:#ffc933}}
+:root[data-theme="dark"]{--bg:#12150f;--sf:#1c211a;--tx:#eef2e8;--mu:#97a38f;--ac:#8dff1f;--acx:#10200a;--ln:#2e362a;--st:#ffc933}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:16px/1.4 "Trebuchet MS",system-ui,sans-serif;max-width:560px;margin:0 auto;padding:0 14px 96px}
+h1{font:800 26px/1 "Arial Black",Impact,sans-serif;margin:18px 0 4px;letter-spacing:-.5px}
+.sub{color:var(--mu);font-size:14px;margin:0 0 12px}
+.bar{height:12px;background:var(--ln);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ac);width:0;transition:width .4s}
+.tabs,.chips{display:flex;gap:8px;margin:14px 0 10px;overflow-x:auto}
+button{font:inherit;color:inherit;cursor:pointer}
+.tab,.chip{border:1px solid var(--ln);background:var(--sf);padding:8px 14px;border-radius:20px;white-space:nowrap}
+.tab.on,.chip.on{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:700}
+input[type=search],input[type=text],select,textarea{width:100%;font:inherit;color:var(--tx);background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:10px}
+.row{display:flex;align-items:center;gap:12px;background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:8px;margin:8px 0;width:100%;text-align:left}
+.th{width:48px;height:48px;border-radius:8px;background:var(--ln);flex:none;object-fit:cover;display:grid;place-items:center;color:var(--mu);font-weight:700}
+.row.miss .th{opacity:.6}
+.row .n{flex:1;min-width:0}
+.row .n b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .n small{color:var(--mu)}
+.stars{color:var(--st);letter-spacing:1px;white-space:nowrap}
+.fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ac);color:var(--acx);border:0;border-radius:30px;padding:15px 28px;font-weight:800;box-shadow:0 4px 16px rgba(0,0,0,.3);z-index:5}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;z-index:10;align-items:flex-end;justify-content:center}
+.sheet.open{display:flex}
+.card{background:var(--bg);width:100%;max-width:560px;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.card h2{margin:0 0 10px;font-size:20px}
+.pic{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:var(--ln);display:grid;place-items:center;color:var(--mu);margin-bottom:10px}
+.btn{border:1px solid var(--ln);background:var(--sf);padding:11px 14px;border-radius:10px;margin:4px 4px 4px 0}
+.btn.pri{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:700}
+.rate{font-size:34px;color:var(--st);margin:6px 0;display:flex;gap:2px}
+.rate button{background:none;border:0;font-size:34px;line-height:1;padding:2px;color:inherit}
+video{width:100%;border-radius:12px;background:#000;max-height:50vh}
+.bd{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.badge{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:12px;text-align:center}
+.badge.off{opacity:.45}
+.badge b{display:block;font-size:26px}
+.hint{color:var(--mu);font-size:14px}
+.g{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}
+.g button{aspect-ratio:1;padding:0;border:1px solid var(--ln);background:var(--sf);border-radius:4px;font-size:11px;color:var(--mu);overflow:hidden}
+.g button.got{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:700}
+.g button.fr{opacity:.45;border-style:dashed}
+.g img{width:100%;height:100%;object-fit:cover;display:block}
+:root:not([data-theme="none"]){color-scheme:dark;--bg:#0a0c08;--sf:#161a12;--tx:#f2f7ea;--mu:#9aa590;--ac:#8dff1f;--acx:#0a1204;--ln:#2a3324;--st:#ffd23d}
+body{background:radial-gradient(ellipse at 50% 0,var(--bg1) 0,#0a0c08 60%) fixed no-repeat,#0a0c08}
+h1{display:flex;align-items:center;gap:10px;font:italic 900 36px/1 Impact,"Arial Black",sans-serif;color:var(--ac);text-shadow:0 0 14px rgba(var(--acr),.55);margin:16px 0 6px}
+h1 svg{width:26px;height:36px;fill:var(--ac);filter:drop-shadow(0 0 6px var(--ac))}
+.bar{height:14px;border-radius:3px;transform:skewX(-20deg);background:#1b2316}
+.bar i{background:repeating-linear-gradient(115deg,var(--ac) 0 10px,var(--ac3) 10px 20px);box-shadow:0 0 12px var(--ac)}
+.tab,.chip{border-radius:4px;transform:skewX(-10deg);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.4px}
+.tab.on,.chip.on{box-shadow:0 0 10px var(--ac)}
+.fab{border-radius:4px;transform:translateX(-50%) skewX(-10deg);box-shadow:0 0 20px var(--ac);text-transform:uppercase;letter-spacing:.6px;font-size:17px}
+.row{border-left-width:6px}
+.gw{overflow-x:auto;padding-bottom:10px}
+.g{grid-template-columns:repeat(10,74px);gap:5px;width:max-content}
+.g.sm{grid-template-columns:repeat(10,1fr);gap:3px;width:auto}
+.g .cl{position:relative;width:100%;height:74px;aspect-ratio:auto;padding:4px;border:2px solid var(--c);border-radius:8px;background:linear-gradient(170deg,var(--c) 0,var(--c) 30%,#0d110a 100%);color:#fff;display:flex;flex-direction:column;justify-content:space-between;text-align:left;overflow:hidden;filter:saturate(.55) brightness(.8)}
+.g .cl.g1{filter:none;box-shadow:0 0 10px var(--c)}
+.g .cl.fe{background:transparent;border:1px dashed var(--ln);filter:none;opacity:.5;color:var(--mu)}
+.g .cl i{font-style:normal;font-size:12px;font-weight:900;position:relative;text-shadow:0 1px 2px #000}
+.g .cl b{position:relative;font:800 10px/1.1 "Trebuchet MS",sans-serif;margin:0 -4px -4px;padding:3px 4px;background:rgba(0,0,0,.62);text-shadow:0 1px 2px #000;word-break:break-word;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.g .cl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.g.sm .cl{height:auto;aspect-ratio:1;padding:0;justify-content:center;align-items:center;border-width:1px}
+.g.sm .cl b{display:none}
+.pr{border:1px solid var(--ln);border-left:5px solid var(--ac);background:var(--sf);border-radius:8px;padding:10px 12px;margin:14px 0 0}
+.pr p{margin:4px 0;font-size:14px}
+.pr a{text-decoration:none;display:inline-block;color:var(--tx)}
+.pr .btn.pri{color:var(--acx)}
+.of{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln)}
+.of:last-of-type{border-bottom:0}
+.op{text-align:right;flex:none}
+.op b{display:block;font-size:20px;color:var(--ac)}
+.op .btn{display:inline-block;margin:6px 0 0;padding:6px 10px;font-size:13px}
+.pr textarea{margin:8px 0}
+#pt{cursor:pointer;position:fixed;top:calc(env(safe-area-inset-top,0px) + 62px);right:10px;z-index:30;margin:0;padding:3px 9px;border-radius:999px;background:rgba(20,22,18,.88);border:1px solid #2f3a22;font-size:14px;line-height:1.2;width:auto}
+#pt .fl{margin:0}
+.pgt{display:flex;gap:8px;margin:12px 0 0}
+.pgt button{flex:1;min-width:0;border:1px solid var(--ln);background:var(--sf);padding:9px 2px;border-radius:4px;font-weight:800;font-size:11px;text-transform:uppercase;transform:skewX(-10deg)}
+.pgt button.on{background:var(--ac);color:var(--acx);border-color:var(--ac);box-shadow:0 0 10px var(--ac)}
+.pg{display:flex;align-items:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -14px;scrollbar-width:none}
+.pg::-webkit-scrollbar{display:none}
+.pp{flex:0 0 100%;min-width:0;scroll-snap-align:start;padding:0 14px}
+.pp h3{margin:18px 0 6px;font-size:16px}
+.pc{text-align:center;background:linear-gradient(160deg,var(--bg1),#0d160a);border:1px solid var(--ac);border-radius:14px;padding:20px 14px;margin:14px 0;box-shadow:0 0 22px rgba(var(--acr),.25)}
+.ring{width:100%;margin:0 auto 8px}
+.ring svg{display:block;width:110px;height:154px;margin:0 auto 6px;filter:drop-shadow(0 0 8px rgba(255,255,255,.45))}
+.rn{display:flex;flex-direction:column;align-items:center}
+.rn b{font:italic 900 46px/1 Impact,"Arial Black",sans-serif;color:var(--ac)}
+.rn span{color:var(--mu);font-size:13px}
+.vc{display:flex;align-items:center;gap:12px;border:2px dashed var(--ac);border-radius:12px;padding:12px;margin:8px 0;background:var(--sf)}
+.fl{display:inline-flex;align-items:center;gap:2px;font-weight:800;margin-right:6px;filter:drop-shadow(0 0 6px #ff7a00)}
+.fl b{color:#ffb347}
+.fl.dim,.flb.dim{filter:grayscale(.85) brightness(.9);opacity:.75}
+.fl.off,.flb.off{filter:grayscale(1);opacity:.35}
+.gem{display:inline-block;width:1em;height:1em;vertical-align:-.12em;background:linear-gradient(135deg,#8fdcff,#1e6bff 60%,#0b3aa8);clip-path:polygon(25% 5%,75% 5%,100% 38%,50% 100%,0 38%)}
+.gv{font-size:34px;font-weight:900;color:#5fb4ff;text-shadow:0 0 12px #1e6bff}
+.vc2{display:flex;gap:8px;align-items:center;margin-top:8px}
+
+#p4{font-family:"Lilita One","Trebuchet MS",sans-serif;letter-spacing:.3px}
+#p4 h3{margin:10px 0 8px;font-size:26px;color:#ffd75e;text-shadow:0 3px 0 #5a3500,0 0 0 #000;-webkit-text-stroke:1px #4a2a00;text-align:center}
+#p4 .pr{background:linear-gradient(#6b4a2b,#4f351d);border:3px solid #2b1a0a;border-radius:12px;box-shadow:inset 0 2px 0 #9a7447,0 4px 0 #1d1105;color:#fff3d6}
+#p4 .pr b{font-weight:400;font-size:18px;text-shadow:0 2px 0 #2b1a0a}
+#p4 .hint{color:#e7d3a8;font-family:system-ui,sans-serif;font-size:12px;letter-spacing:0}
+#p4 .gv{font-family:inherit;font-size:40px;font-weight:400;color:#bfe6ff;text-shadow:0 3px 0 #0b3aa8,0 0 14px #3aa0ff}
+#p4 .btn{font-family:inherit;font-weight:400;font-size:16px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.45);background:linear-gradient(#7fe03a,#3fa51a);border:3px solid #1d4d08;border-radius:10px;box-shadow:inset 0 2px 0 #c3f58f,0 3px 0 #1d4d08;padding:8px 14px}
+#p4 .btn:active{transform:translateY(2px);box-shadow:inset 0 2px 0 #c3f58f,0 1px 0 #1d4d08}
+#p4 .btn[disabled]{background:linear-gradient(#9a9a9a,#6c6c6c);border-color:#333;box-shadow:inset 0 2px 0 #c9c9c9,0 3px 0 #333;opacity:.8}
+.pkg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.pkc{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 4px 8px;border-radius:10px;border:3px solid #1d3f7a;background:radial-gradient(circle at 50% 30%,#5bb0ff,#2a6fd6 70%,#1b4a9a);box-shadow:inset 0 2px 0 #9fd3ff,0 3px 0 #10244a}
+.pkc.pop{border-color:#8a5a00;background:radial-gradient(circle at 50% 30%,#ffe27a,#f0a800 70%,#b87400)}
+.pkc .gem{font-size:34px;filter:drop-shadow(0 3px 0 rgba(0,0,0,.35))}
+.pkc.pop .gem{font-size:44px}
+.pkc .n{font-size:20px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+.pkc .rb{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#e8392b;color:#fff;font-size:11px;padding:1px 8px;border:2px solid #7a1208;border-radius:6px;white-space:nowrap}
+.pkc .btn{width:100%;font-size:14px;padding:6px 2px}
+.cl.nm{opacity:.12}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.sg div{background:var(--sf);border:1px solid var(--ln);border-radius:6px;padding:8px;text-align:center}
+.sg span{display:block;font-size:20px;font-weight:900}
+.sg small{color:var(--mu,#999);font-size:11px}
+
+.pp{padding-bottom:140px}
+.gw{overflow:visible}
+.g{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:auto}
+.g .cl{height:104px;padding:6px}
+.g .cl i{font-size:13px}
+.g .cl b{font-size:12px;padding:4px 6px;margin:0 -6px -6px}
+.g .cl.fe{display:none}
+.g.sm{grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
+.g.sm .cl{height:auto}
+#svb{left:12px!important;transform:none!important}
+#rem{padding-right:84px!important}
+.gem{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 56'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23c9ecff'/%3E%3Cstop offset='1' stop-color='%234aa8ff'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236cc0ff'/%3E%3Cstop offset='1' stop-color='%231f63e8'/%3E%3C/linearGradient%3E%3ClinearGradient id='c' x1='1' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%232f7bff'/%3E%3Cstop offset='1' stop-color='%230a2a8a'/%3E%3C/linearGradient%3E%3ClinearGradient id='d' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%231d58d8'/%3E%3Cstop offset='1' stop-color='%23071c66'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M16 2h32l16 18-32 34L0 20z' fill='%232a7bff'/%3E%3Cpath d='M16 2h32l-16 18z' fill='url(%23a)'/%3E%3Cpath d='M0 20L16 2l16 18z' fill='url(%23b)'/%3E%3Cpath d='M64 20L48 2 32 20z' fill='url(%23c)'/%3E%3Cpath d='M0 20h32L32 54z' fill='url(%23c)'/%3E%3Cpath d='M64 20H32l0 34z' fill='url(%23d)'/%3E%3Cpath d='M16 2h32l16 18-32 34L0 20z' fill='none' stroke='%23d8f0ff' stroke-opacity='.8' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M0 20h64M16 2l16 18M48 2L32 20' stroke='%23fff' stroke-opacity='.35' stroke-width='.8'/%3E%3Cpath d='M19 7l7-3' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' opacity='.95'/%3E%3Ccircle cx='50' cy='13' r='2' fill='%23fff' opacity='.8'/%3E%3C/svg%3E") center/contain no-repeat;clip-path:none;width:1.15em;height:1em}
+#p4 .pr.bal{background:radial-gradient(circle at 50% 0,#2f6fe0,#14306f 70%);border-color:#0a1a42;box-shadow:inset 0 2px 0 #7fb2ff,0 4px 0 #060f2a}
+#p4 .gv{display:flex;align-items:center;justify-content:center;gap:10px;font-size:48px}
+#p4 .gv .gem{font-size:46px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
+#p4 .tk{position:relative;display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border-radius:8px;background:linear-gradient(#ffe9a8,#f1c557);border:3px solid #8a5a00;color:#4a2d00;box-shadow:0 3px 0 #5a3500}
+#p4 .tk b{text-shadow:none;color:#4a2d00}
+#p4 .tk .hint{color:#7a5410}
+#p4 .tk.used{filter:grayscale(1);opacity:.55}
+#p4 .tk:before,#p4 .tk:after{content:"";position:absolute;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;background:#4f351d;border:3px solid #8a5a00}
+#p4 .tk:before{left:-10px}#p4 .tk:after{right:-10px}
+
+.pr.sk{text-align:center;background:radial-gradient(circle at 50% 0,rgba(255,122,0,.22),transparent 60%),var(--sf);border-color:#6a3a08}
+.pr.sk.ok{border-color:#ff7a00;box-shadow:0 0 18px rgba(255,122,0,.35)}
+.sk1{display:flex;align-items:center;justify-content:center;gap:14px}
+.sk1 .flb{font-size:64px}
+.skn{font-size:56px;font-weight:900;line-height:1;color:#ffb347;text-shadow:0 0 16px rgba(255,122,0,.6)}
+.skt{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--mu)}
+.qb{border-color:#7a52e0}
+.qh{display:flex;gap:10px;align-items:center}
+.mo{width:104px;height:96px;flex:none;filter:drop-shadow(0 4px 10px rgba(120,80,255,.55));overflow:visible}
+@keyframes gulp{0%,100%{transform:rotate(0)}50%{transform:rotate(-7deg) translate(-2px,-2px)}}
+@keyframes drip{0%{opacity:0;transform:translateY(-3px)}30%{opacity:1}100%{opacity:0;transform:translateY(10px)}}
+.mo .can{transform-box:fill-box;transform-origin:50% 100%;animation:gulp 2.4s ease-in-out infinite}
+.mo .dr circle{animation:drip 2.4s infinite}.mo .dr circle+circle{animation-delay:.9s}
+@media (prefers-reduced-motion:reduce){.mo *{animation:none!important}}
+.qr{display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 10px;border:1px solid var(--ln);border-radius:10px;background:var(--bg)}
+.qr.d{opacity:.55}
+.qc{width:26px;height:26px;border-radius:50%;background:#7a52e0;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;flex:none}
+.qr.d .qc{background:var(--ac);color:var(--acx)}
+.qt{flex:1;min-width:0;font-weight:700;font-size:14px}
+.qt small{display:block;color:var(--mu);font-weight:600;margin-top:2px}
+.qr .btn{margin:0;padding:10px 14px;font-size:18px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shine{0%{transform:translateX(-120%) skewX(-20deg)}60%,100%{transform:translateX(220%) skewX(-20deg)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes twk{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
+#p4 h3.shh{display:flex;justify-content:center;margin:14px 0 14px;-webkit-text-stroke:0;text-shadow:none}
+#p4 h3.shh span{position:relative;padding:6px 38px;font-size:28px;color:#fff;text-shadow:0 3px 0 #7a1208;background:linear-gradient(#ff5a45,#c4251a);border:3px solid #6e0f06;border-radius:8px;box-shadow:inset 0 2px 0 #ff9a8a,0 4px 0 #3a0803}
+#p4 h3.shh span:before,#p4 h3.shh span:after{content:"";position:absolute;top:8px;width:26px;height:100%;background:#9c1a10;border:3px solid #6e0f06;z-index:-1}
+#p4 h3.shh span:before{left:-22px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,30% 50%)}
+#p4 h3.shh span:after{right:-22px;clip-path:polygon(0 0,100% 0,70% 50%,100% 100%,0 100%)}
+#p4 .pr.bal{position:relative;overflow:hidden}
+#p4 .pr.bal:before{content:"";position:absolute;left:50%;top:50%;width:420px;height:420px;margin:-210px 0 0 -210px;background:repeating-conic-gradient(rgba(150,200,255,.18) 0 10deg,transparent 10deg 20deg);animation:spin 40s linear infinite;pointer-events:none}
+#p4 .pr.bal>*{position:relative}
+#p4 .pr.bal .sp{position:absolute;color:#fff;font-size:14px;animation:twk 2.4s infinite}
+#p4 .gv .gem{animation:bob 2.6s ease-in-out infinite}
+#p4 .btn{position:relative;overflow:hidden}
+#p4 .btn:not([disabled]):after{content:"";position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:shine 3.2s infinite}
+#p4 .offer{border-color:#2f7a12;background:linear-gradient(#5a4326,#3d2a14)}
+#p4 .ofh{display:flex;align-items:center;gap:12px}
+#p4 .oft{font-size:40px;filter:drop-shadow(0 3px 0 rgba(0,0,0,.4));animation:bob 3s ease-in-out infinite}
+#p4 .offer #bv{width:100%;font-size:19px;padding:12px;margin-top:6px}
+.pkc{overflow:visible;padding-top:18px}
+.pkc .gp{position:relative;height:56px;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.pkc .gp .gem{font-size:30px;margin:0 -8px;filter:drop-shadow(0 3px 0 rgba(0,0,0,.35))}
+.pkc.t2 .gp .gem{font-size:30px}
+.pkc.t3 .gp .gem{font-size:26px}
+.pkc .gp .gem.g1{transform:translateY(-8px)}.pkc .gp .gem.g3{transform:translateY(-8px)}
+.pkc .gp .gem.g2{font-size:36px;position:relative;z-index:2}
+.pkc.t1{background:radial-gradient(circle at 50% 30%,#7fd0ff,#2a7bd6 70%,#1b4a9a)}
+.pkc.t2{background:radial-gradient(circle at 50% 30%,#ffe27a,#f0a800 70%,#b87400);border-color:#8a5a00;transform:translateY(-4px)}
+.pkc.t3{background:radial-gradient(circle at 50% 30%,#d9a8ff,#8a3be0 70%,#4b1a8f);border-color:#3a1470}
+.pkc .btn{font-size:14px}
+.pkc{animation:none}
+@media (prefers-reduced-motion:reduce){#p4 *,#p4 *:before,#p4 *:after{animation:none!important}}
+
+#p4 .pr:not(.bal):not(.offer){background:repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 2px,transparent 2px 7px),repeating-linear-gradient(180deg,rgba(255,220,160,.05) 0 1px,transparent 1px 5px),linear-gradient(#6b4a2b,#4a321b)}
+#p4 .pr.bal{box-shadow:inset 0 2px 0 #9fc6ff,inset 0 -18px 30px rgba(0,10,50,.45),0 6px 14px rgba(0,0,0,.5),0 4px 0 #060f2a}
+.pkc{box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -14px 24px rgba(0,0,0,.28),0 6px 12px rgba(0,0,0,.5),0 3px 0 rgba(0,0,0,.6)}
+.pkc:before{content:"";position:absolute;left:6px;right:6px;top:4px;height:34%;border-radius:8px 8px 40px 40px;background:linear-gradient(rgba(255,255,255,.45),rgba(255,255,255,0));pointer-events:none}
+.ring svg{filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
+.rcb{display:flex;flex-direction:column;gap:8px}.rcb .btn{display:block;margin:0;text-align:center;box-sizing:border-box;width:100%}
+.g .cl .fv{position:absolute;left:5px;bottom:34px;font-style:normal;color:#ffd75e;font-size:15px;text-shadow:0 1px 3px #000;z-index:2}
+.lbr{display:flex;gap:10px;align-items:center;padding:6px 8px;margin-top:6px;border-radius:8px;background:var(--bg);border:1px solid var(--ln)}.lbr.me{border-color:var(--ac)}.lbr .lbn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#lb input{margin-top:10px}
+.pf{display:flex;gap:14px;align-items:center;margin-bottom:10px}.pfa{width:64px;height:64px;border-radius:50%;background:linear-gradient(#a77bff,#5a2fc0);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;color:#fff;border:3px solid var(--ac);flex:none}.pfn{font-size:22px}
+#card .sg{margin:10px 0}
+#card #nn{margin:8px 0}
+#card .bd{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:8px 0}#card .badge{padding:8px 2px;font-size:10px;line-height:1.2}#card .badge b{font-size:16px;display:block}
+.tk0{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;margin-bottom:12px}
+.avi{border-radius:50%;object-fit:cover;display:inline-flex;align-items:center;justify-content:center;border:3px solid var(--ac);box-shadow:0 0 0 3px var(--bg),0 0 14px rgba(120,255,0,.35);box-sizing:border-box;flex:none;vertical-align:middle}
+.avi.av0{background:linear-gradient(#a77bff,#5a2fc0);color:#fff;font-weight:900}
+.lbr .avi{border-width:2px;box-shadow:none}
+#acb .avi{border:0;box-shadow:none}
+.tkr{display:flex;width:100%;justify-content:space-around;margin:6px 0}
+.tkr div{display:flex;flex-direction:column;align-items:center;flex:1}
+.tkr div+div{border-left:1px solid var(--ln)}
+.tkr b{font-size:20px}.tkr small{color:var(--mu);font-size:12px}
+.tk0 .btn{width:100%;box-sizing:border-box;margin:4px 0}
+.vb{width:.9em;height:.9em;vertical-align:-.1em;margin-left:4px}
+.vth{display:flex;gap:6px;margin:6px 0}.vth img{width:50%;border-radius:6px;border:1px solid var(--ln)}
+input[type=date]{width:100%;box-sizing:border-box;font:inherit;color:var(--tx);background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:12px;margin:8px 0}
+.bio{margin:2px 8px;font-size:14px;color:var(--tx);max-width:90%}
+#card textarea{width:100%;box-sizing:border-box;font:inherit;color:var(--tx);background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:10px;margin:6px 0}
+.lbr[data-u]{cursor:pointer}
+/* V49 polish */
+body{padding-bottom:130px;font-family:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;background:radial-gradient(ellipse 120% 50% at 50% -5%,var(--bg2) 0,#0f1a09 45%,#080a07 100%) fixed no-repeat,#080a07}
+h1{font-size:34px;margin:14px 0 4px;letter-spacing:-.5px}
+.sub{font-size:13px;letter-spacing:.2px}
+.bar{height:10px;border-radius:6px;transform:none;background:#141b10;border:1px solid #2a3a1e;box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+.bar i{border-radius:6px}
+.tab,.chip{transform:none;border-radius:999px;font-size:12px;padding:9px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);letter-spacing:.6px;backdrop-filter:blur(6px)}
+.tab.on,.chip.on{background:linear-gradient(180deg,var(--ac2),var(--ac3));box-shadow:0 4px 16px rgba(var(--acr),.35);border-color:transparent}
+#pgt .tab,#pgt .tab.on{transform:none!important;border-radius:999px!important;font-size:12px}
+.row{border:1px solid rgba(255,255,255,.07);border-left-width:5px;border-radius:16px;padding:10px 12px;margin:9px 0;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015));box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .15s}
+.row:active{transform:scale(.98)}
+.row .th{width:52px;height:52px;border-radius:12px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.row .n b{font-size:16px;letter-spacing:.1px}
+.row .n small{font-size:12.5px}
+.pr,.card .pr{border-radius:18px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));box-shadow:0 8px 24px rgba(0,0,0,.35)}
+#p3 .pr{border-left-width:1px!important;padding:16px}
+#p3 h2,#p3 h3{font-size:20px;letter-spacing:.3px}
+#ofr>b{font-size:18px}
+#ofr>.hint{font-size:12.5px;margin:4px 0 8px}
+.of{padding:12px 0;gap:14px;border-bottom:1px solid rgba(255,255,255,.07)}
+.of:first-of-type{border-top:0}
+.of .hint{font-size:12.5px;line-height:1.35}
+.of b:first-child{font-size:16px}
+#rem{font-size:13px!important;line-height:1.3!important;padding:9px 92px 9px 12px!important;border-radius:14px!important;margin:8px 0!important;background:linear-gradient(135deg,rgba(255,140,0,.22),rgba(255,80,0,.08))!important;border:1px solid rgba(255,150,40,.45)!important;font-weight:700}
+#pt{background:rgba(10,14,8,.85);backdrop-filter:blur(8px);border:1px solid rgba(255,150,40,.5);box-shadow:0 4px 14px rgba(0,0,0,.5);padding:4px 11px;font-weight:800}
+.fab{padding:13px 24px;font-size:15px;border-radius:999px;transform:translateX(-50%);background:linear-gradient(180deg,var(--ac2),var(--ac3));box-shadow:0 8px 28px rgba(var(--acr),.45),0 0 0 4px rgba(10,12,8,.6);white-space:nowrap}
+#svb{font-size:12px;padding:8px 12px;border-radius:999px;background:rgba(20,26,16,.9);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12)}
+#acb{box-shadow:0 6px 20px rgba(var(--acr),.35)}
+input[type=search],input[type=text],select,textarea{border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:12px 14px}
+input:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px rgba(var(--acr),.18)}
+.btn{border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.btn.pri{background:linear-gradient(180deg,var(--ac2),var(--ac3));border:0;box-shadow:0 4px 14px rgba(var(--acr),.3)}
+.card{border-radius:24px 24px 0 0;background:linear-gradient(180deg,#141a10,#0b0e09);border:1px solid rgba(255,255,255,.08);border-bottom:0}
+.sheet{backdrop-filter:blur(4px)}
+.badge{border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08)}
+
+.ci{display:block;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.th.can{background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.12),rgba(255,255,255,.03))}
+.cl .ci{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);height:62%;width:auto;opacity:.95;pointer-events:none}
+.cl.g0 .ci{opacity:.4;filter:grayscale(.5)}
+.cl{position:relative}
+.chi{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font:800 15px/1 system-ui,sans-serif;color:#fff;letter-spacing:.5px;box-shadow:0 4px 10px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.35);text-shadow:0 1px 2px rgba(0,0,0,.4)}
+#mk a.btn{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;text-decoration:none;color:var(--tx)}
+#mk .chi{width:30px;height:30px;border-radius:10px;font-size:12px}
+.pg{overflow-y:hidden}
+
+.cfb{height:12px;border-radius:6px;background:#141b10;border:1px solid #2a3a1e;overflow:hidden;margin:10px 0 6px}
+.cfb i{display:block;height:100%;border-radius:6px;transition:width .3s}
+.wk{display:flex;align-items:flex-end;gap:6px;height:44px;margin-top:8px}
+.wk i{flex:1;background:linear-gradient(var(--ac),#3f8a00);border-radius:4px 4px 0 0;opacity:.8}
+.tl{margin-top:12px}
+.tl .ofh{display:flex;align-items:center;gap:12px}
+.tl .oft{font-size:34px;animation:none}
+.tl .rcb{display:flex;gap:8px;margin:6px 0}
+.tl .rcb .btn{flex:1;margin:0}
+.tl .rcb #cfm{flex:.35}
+.tl #rnd{width:100%;margin:8px 0}
+.pgt{gap:5px}
+.pgt button{font-size:10px;letter-spacing:0;padding:9px 0}
+.swg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.swc{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;border:2px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);font-weight:800;text-align:left}
+.swc.on{border-color:#fff;box-shadow:0 0 14px rgba(255,255,255,.25)}
+.sws{flex:none;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 3px 10px rgba(0,0,0,.4)}
+.evl{display:grid;gap:8px;margin:12px 0}
+.evi{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);opacity:.75}
+.evi.on{opacity:1;border-color:var(--c1)}
+.fl{filter:none!important}
+.fl.dim,.fl.off{opacity:.85}
+.fl .mst{display:block;margin-right:3px}
+.mob{display:grid;place-items:center;min-width:90px}
+.mst{overflow:visible}
+.mst.fr{filter:drop-shadow(0 0 10px var(--ac));animation:mbo 2.4s ease-in-out infinite}
+.mst:not(.fr){animation:msh 5s ease-in-out infinite}
+@keyframes mbo{50%{transform:translateY(-4px) scale(1.04)}}
+@keyframes msh{0%,86%,100%{transform:none}90%{transform:rotate(-3deg)}94%{transform:rotate(3deg)}}
+/* V56 größer + übersichtlicher */
+body{font-size:18px;line-height:1.45;padding-left:16px;padding-right:16px}
+.pp{padding-left:16px;padding-right:16px}
+.pg{margin:0 -16px}
+.pgt{gap:6px;margin:10px 0 4px}
+.pgt button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;padding:8px 0 7px;border-radius:14px!important;transform:none!important;letter-spacing:.2px}
+.pgt button em{font-style:normal;font-size:22px;line-height:1.1}
+h1{font-size:40px;margin:18px 0 6px}
+.sub{font-size:16px;margin-bottom:14px}
+.bar{height:14px}
+.tab,.chip{font-size:14px;padding:11px 18px}
+.tabs,.chips{gap:10px;margin:16px 0 12px}
+input[type=search],input[type=text],select,textarea{font-size:17px;padding:14px 16px}
+.row{padding:12px 14px;margin:12px 0;gap:14px}
+.row .th{width:62px;height:62px;border-radius:14px}
+.row .n b{font-size:18px}
+.row .n small{font-size:15px}
+.stars{font-size:17px}
+.pr,.card .pr{padding:18px;margin:16px 0}
+.pr>b,.pr .ofh b{font-size:19px}
+.hint{font-size:15px;line-height:1.45}
+.btn{font-size:17px;padding:14px 18px;min-height:48px;border-radius:14px}
+.pp h3{font-size:20px;margin:26px 0 10px}
+.card h2{font-size:24px;margin-bottom:14px}
+.card{padding:22px 18px calc(22px + env(safe-area-inset-bottom,0px))}
+.fab{font-size:17px;padding:16px 30px}
+#svb{font-size:14px;padding:10px 14px}
+#acb{width:60px;height:60px}
+#rem{font-size:15px!important;padding:12px 100px 12px 14px!important}
+#pt{font-size:17px;padding:5px 12px;top:calc(env(safe-area-inset-top,0px) + 84px)}
+.pgt button{font-size:10.5px}
+.of{padding:16px 0}
+.of b:first-child{font-size:18px}
+.of .hint{font-size:14px}
+.chi{width:48px;height:48px;font-size:17px;border-radius:15px}
+.swc{font-size:17px;padding:14px}
+.skn{font-size:60px}
+.badge{padding:16px}
+.badge b{font-size:30px}
+.cl b{font-size:13px}
+.sk1{flex-wrap:wrap;text-align:center}
+.mob{min-width:0}
+.wlc .ofh,.tl .ofh{display:flex;align-items:center;gap:12px}
+.wlc .oft{font-size:34px;animation:none}
+.favl .row{margin:8px 0}
+.sdr{gap:4px}
+.sdc{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:0}
+.sdl{font-size:10px;font-weight:800;text-transform:uppercase;color:var(--mu)}
+.sd{display:flex;align-items:center;justify-content:center;width:36px;height:36px;font-size:18px}
+.sd.f{background:rgba(255,122,0,.18)}
+.skb{margin-top:12px}
+.skb .btn{display:block;width:100%;box-sizing:border-box;padding:14px;font-size:16px;margin:0}
+.pr.sk .hint{margin:10px 0 0}
+.flb.dim{filter:none;opacity:.8}
+.sdr{display:flex;gap:6px;justify-content:center;margin:10px 0}
+.sd{width:34px;height:34px;border-radius:50%;border:2px dashed #555;box-sizing:border-box;object-fit:cover;display:inline-block}
+.sd.now{border-color:#ff7a00}
+.sd.on{border:2px solid #ff7a00}
+.flb{font-size:56px;line-height:1;filter:drop-shadow(0 0 10px #ff7a00)}
+.hr{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--ln)}
+.g .cl s{position:absolute;top:3px;right:4px;font:800 8px/1 "Trebuchet MS",sans-serif;text-decoration:none;color:#fff;background:rgba(0,0,0,.55);border-radius:3px;padding:1px 3px;z-index:1}
+:root{--acr:141,255,31;--ac2:#a6ff4d;--ac3:#6fd400;--bg1:#1d3a0b;--bg2:#2a5a0f;--evi:""}
+h1::after{content:var(--evi);font-style:normal;margin-left:4px}
+.sw{width:38px;height:38px;border-radius:50%;border:3px solid rgba(255,255,255,.15);padding:0;cursor:pointer}
+.sw.on{border-color:#fff;box-shadow:0 0 12px currentColor}
+.swr{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.tg{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
+.tgb{width:52px;height:30px;border-radius:15px;background:#2a3324;border:0;position:relative;flex:none}
+.tgb i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .2s}
+.tgb.on{background:var(--ac)}.tgb.on i{left:25px}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+<div class="pgt" id="pgt"><button class="on" data-pg="0"><em>🥫</em>Sammlung</button><button data-pg="1"><em>⭐</em>Punkte</button><button data-pg="2"><em>🏷️</em>Preise</button><button data-pg="3"><em>💎</em>Shop</button><button data-pg="4"><em>🎨</em>Farben</button></div>
+<div id="rem" style="display:none;margin:8px 0 0;padding:8px 12px;border-radius:8px;background:#2a1a08;border:1px solid #ff7a00;color:#ffd9a8;font-size:13px;font-weight:700;cursor:pointer"></div>
+<div class="pg" id="pg"><section class="pp" id="p1">
+<h1><svg viewBox="0 0 40 56" aria-hidden="true"><path d="M10 10Q10 6 20 6Q30 6 30 10V48Q30 52 20 52Q10 52 10 48Z" fill="#f4f6f7"/><ellipse cx="20" cy="9.5" rx="10" ry="3" fill="#aeb6bb"/></svg>DOSEN-DEX</h1>
+<p class="sub" id="sub"></p>
+<div class="bar"><i id="bar"></i></div>
+<div class="pr" id="pt"></div>
+<div class="pr" id="bk" style="display:none"></div><button id="svb" style="position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);left:50%;transform:translateX(-50%);z-index:30;padding:4px 12px;font-size:12px;font-weight:800;border-radius:999px;border:1px solid #2f3a22;background:rgba(20,22,18,.9);color:#cfd8c0">💾 Speichern</button>
+<div class="tabs" id="tabs"></div>
+<div id="view"></div>
+</section><section class="pp" id="p2"></section><section class="pp" id="p3">
+<h3>Preise und Märkte</h3>
+<div class="pr" style="margin-top:6px"><b>Deine Postleitzahl</b><input type="text" id="plz" maxlength="40" autocomplete="postal-code" placeholder="Postleitzahl oder Ort, z. B. 10115"><div style="margin-top:6px"><a class="btn" id="l2" target="_blank" rel="noopener" style="display:none">In Maps öffnen</a></div><p class="hint" id="lm">Gib Postleitzahl oder Ort ein. Darunter erscheinen die Märkte für deine Gegend.</p></div>
+<div class="pr" id="ofr"></div>
+<div class="pr"><b>Märkte in deiner Nähe</b><div id="mk" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"></div><p class="hint" id="mkh"></p></div>
+</section><section class="pp" id="p4"></section><section class="pp" id="p5"></section></div>
+<button class="fab" id="scan">Dose scannen</button>
+<div class="sheet" id="sheet"><div class="card" id="card"></div></div>
+
+<script>
+var NAMES="The Original Green|Zero-Sugar|Lo-Carb|Absolutely Zero|Ultra White|Ultra Red|Ultra Blue|Ultra Violet|Ultra Paradise|Ultra Gold|Ultra Rosa|Ultra Fiesta Mango|Ultra Watermelon|Ultra Peachy Keen|Ultra Strawberry Dreams|Ultra Sunrise|Ultra Black|Ultra Fantasy Ruby Red|Khaos|Mango Loco|Pipeline Punch|Pacific Punch|Aussie Lemonade|Bad Apple|Ripper|The Doctor|Rehab Peach Tea|Rehab Lemonade|Rehab Wild Berry|Rehab Green Tea|Java Mean Bean|Java Loca Moca|Java Salted Caramel|Java Vanilla Light|Java Irish Creme|Java Triple Shot|Hydro Purple Passion|Hydro Mango Loco|Hydro Tropical Thunder|Reserve Watermelon|Reserve Orange Dreamsicle|Reserve White Pineapple|Reserve Kiwi Strawberry|Nitro Cosmic Peach|Nitro Super Dry|Import|Assault|Punch Mad Dog|Monarch|Rosso|Juiced Bad Apple|Juiced Monarch|Ultra Zero Sugar Lime|Mule Ginger Brew|Mule Mango Loco|Lewis Hamilton Zero Sugar|VR46 The Doctor|Peachy Keen|Ultra Vice Guava|Gronk".split("|");
+var GER="The Original Green|Zero-Sugar|Absolutely Zero|Assault|The Doctor|Lando Norris Zero Sugar|Top Speed Zero Sugar|VR46 Zero Sugar|Ultra White|Ultra Red|Ultra Blue|Ultra Black|Ultra Violet|Ultra Gold|Ultra Paradise|Ultra Rosa|Ultra Fiesta Mango|Ultra Watermelon|Ultra Peachy Keen|Ultra Strawberry Dreams|Ultra Fantasy Ruby Red|Mango Loco|Viking Berry|Rio Punch|Aussie Lemonade|Bad Apple|Pipeline Punch|Pacific Punch|Khaotic|Espresso (Limited Edition)".split("|");
+var KEY="dosendex_v2",S={cans:[],tab:"grid",f:"all",q:""};
+function load(){try{var r=localStorage.getItem(KEY);if(r)S.cans=JSON.parse(r)}catch(e){}
+ if(!S.cans.length){var o={};try{JSON.parse(localStorage.getItem("dosendex_v1")||"[]").forEach(function(c){o[c.name]=c})}catch(e){}
+  S.cans=GER.map(function(n,i){var c=o[n]||{};return{id:i,name:n,got:!!c.got,rating:c.rating||0,note:c.note||"",photo:c.photo||"",code:c.code||"",date:c.date||""}});
+  while(S.cans.length<100){S.cans.push({id:S.cans.length,name:"",got:false,rating:0,note:"",photo:"",code:"",date:""})}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S.cans))}catch(e){alert("Speicher voll. Fotos werden nicht mehr gespeichert, bis du Platz schaffst.")}}
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function stars(n){return"★".repeat(n)+"☆".repeat(5-n)}
+function got(){return S.cans.filter(function(c){return c.got})}
+
+function render(){
+ var g=got().length,t=S.cans.filter(function(c){return c.name}).length;
+ $("sub").textContent=g+" von "+t+" Sorten gesammelt, "+(t-g)+" fehlen noch";
+ $("bar").style.width=(t?g/t*100:0)+"%";prender();
+ $("tabs").innerHTML=[["grid","Regal"],["list","Liste"],["top","Rangliste"],["badges","Erfolge"],["stats","Statistik"]].map(function(x){return'<button class="tab'+(S.tab==x[0]?" on":"")+'" data-t="'+x[0]+'">'+x[1]+'</button>'}).join("");
+ var h="";
+ if(S.tab=="grid"){h+=grid2()}else if(S.tab=="stats"){h+=statsHtml()}else if(S.tab=="list"){
+  h+='<input type="search" id="q" placeholder="Sorte suchen" value="'+esc(S.q)+'"><div class="chips">'+[["all","Alle"],["got","Gesammelt"],["miss","Fehlen noch"]].map(function(x){return'<button class="chip'+(S.f==x[0]?" on":"")+'" data-f="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button class="chip" id="add">Eigene Sorte</button></div>';
+  h+=favSort(S.cans.filter(function(c){return c.name&&(S.f=="all"||(S.f=="got")==c.got)&&c.name.toLowerCase().indexOf(S.q.toLowerCase())>-1})).map(row).join("")||'<p class="hint">Keine Treffer. Ändere Suche oder Filter.</p>';
+ }else if(S.tab=="top"){
+  var r=got().filter(function(c){return c.rating}).sort(function(a,b){return b.rating-a.rating});
+  h+=lbBox()+'<h3>Deine Bewertungen</h3>';
+  h+=r.length?r.map(function(c,i){return row(c,i+1)}).join(""):'<p class="hint">Noch keine Bewertungen. Tippe eine gesammelte Dose an und vergib Sterne.</p>';
+ }else{
+  var rated=got().filter(function(c){return c.rating}).length,photos=got().filter(function(c){return c.photo}).length,five=got().filter(function(c){return c.rating==5}).length;
+  var B=[["1","Erste Dose",g>=1],["10","10 Sorten",g>=10],["30","30 Sorten",g>=30],["100%","Alle Sorten",t>0&&g>=t],["★","10 bewertet",rated>=10],["📷","10 Fotos",photos>=10],["5★","Fünf-Sterne-Dose",five>=1],["½","Halbzeit",g>=t/2&&t>0]];
+  h+='<div class="bd">'+B.map(function(b){return'<div class="badge'+(b[2]?"":" off")+'"><b>'+b[0]+'</b>'+b[1]+'</div>'}).join("")+'</div>';
+  var avg=rated?(got().reduce(function(s,c){return s+c.rating},0)/rated).toFixed(1):"–";
+  h+='<p class="hint">Durchschnittliche Bewertung: '+avg+' von 5. Gespeichert wird nur in diesem Browser.</p>';
+ }
+ $("view").innerHTML=h;
+}
+function grid(){return'<div class="g">'+S.cans.map(function(c,i){var k=c.got?"got":(c.name?"":"fr");return'<button class="'+k+'" data-id="'+c.id+'" title="'+esc(c.name)+'" aria-label="'+esc(c.name||"Freier Platz")+'">'+(c.photo?'<img src="'+c.photo+'" alt="">':(c.got?"✓":(i+1)))+'</button>'}).join("")+'</div><p class="hint">Tippe ein Feld an, um die Sorte zu sehen. Gestrichelte Felder sind freie Plätze: Dort kannst du Sorten eintragen, die hier noch fehlen.</p>'}
+var COL=[["lando","#ff8700"],["top speed","#00e5ff"],["vr46","#ffe600"],["doctor","#ffe600"],["assault","#c4281f"],["absolutely","#7fd6ff"],["zero-sugar","#d9dee0"],["original","#8dff1f"],["ultra white","#f5f5f5"],["ultra red","#ff2a2a"],["ultra blue","#2f7bff"],["ultra black","#6b6f78"],["violet","#a64dff"],["gold","#ffc400"],["paradise","#19e6c1"],["rosa","#ff7eb6"],["fiesta","#ff9a1f"],["watermelon","#ff5c7a"],["peachy","#ffb072"],["strawberry","#ff4d8d"],["ruby","#e0115f"],["mango loco","#ffb300"],["viking","#6a3dff"],["rio","#ff2fb3"],["aussie","#f6ff3a"],["bad apple","#a8ff2a"],["pipeline","#ff3c9e"],["pacific","#ff7a1a"],["khaotic","#ff4a1c"],["espresso","#b5753a"]];
+function canIco(c,w){var id="g"+c.replace("#","")+(w||0);return'<svg class="ci" viewBox="0 0 40 64" width="'+(w||28)+'" aria-hidden="true"><defs><linearGradient id="'+id+'" x1="0" x2="1"><stop offset="0" stop-color="'+c+'" stop-opacity=".55"/><stop offset=".35" stop-color="'+c+'"/><stop offset="1" stop-color="'+c+'" stop-opacity=".6"/></linearGradient></defs><rect x="6" y="6" width="28" height="52" rx="6" fill="#161a14"/><rect x="6" y="10" width="28" height="44" fill="url(#'+id+')"/><rect x="9" y="3" width="22" height="6" rx="2" fill="#aeb4b8"/><rect x="9" y="55" width="22" height="6" rx="2" fill="#8c9296"/><path d="M22 18l-7 14h5l-2 12 8-16h-5z" fill="#fff" fill-opacity=".85"/><rect x="10" y="12" width="3" height="40" rx="1.5" fill="#fff" fill-opacity=".28"/></svg>'}
+function chIco(n){var h=0,i;for(i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;return'<span class="chi" style="background:linear-gradient(145deg,hsl('+h+',70%,52%),hsl('+((h+40)%360)+',70%,32%))">'+esc(n.replace(/[^A-Za-zÄÖÜäöü0-9]/g,"").slice(0,2).toUpperCase())+'</span>'}
+function col(n){n=(n||"").toLowerCase();for(var i=0;i<COL.length;i++)if(n.indexOf(COL[i][0])>-1)return COL[i][1];return"#8dff1f"}
+function favSort(a){return a.slice().sort(function(x,y){return(y.fav?1:0)-(x.fav?1:0)||x.id-y.id})}
+function grid2(){var qq=(S.q||"").toLowerCase();return'<input type="search" id="q" placeholder="Monster suchen" value="'+esc(S.q)+'"><div class="chips">'+[["all","Alle"],["got","Gesammelt"],["miss","Fehlen noch"]].map(function(x){return'<button class="chip'+(S.f==x[0]?" on":"")+'" data-f="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button class="chip" id="gz">'+(S.sm?"Mit Namen zeigen":"Kompakt zeigen")+'</button></div><div class="gw"><div class="g'+(S.sm?" sm":"")+'">'+favSort(S.cans.filter(function(c){return c.name&&(S.f=='all'||(S.f=='got')==c.got)})).map(function(c){var i=c.id,k=c.name?(c.got?"g1":"g0"):"fe";if(qq&&(!c.name||c.name.toLowerCase().indexOf(qq)<0))k+=" nm";return'<button class="cl '+k+'" style="--c:'+col(c.name)+'" data-id="'+c.id+'" aria-label="'+esc(c.name||"Freier Platz")+'">'+(c.photo?'<img src="'+c.photo+'" alt="">':(c.name?canIco(col(c.name),0):""))+'<i>'+(c.got?"✓":i+1)+'</i>'+(c.fav?'<em class="fv">★</em>':'')+(GER.indexOf(c.name)>-1?'<s>DE</s>':'')+'<b>'+esc(c.name||"frei")+'</b></button>'}).join("")+'</div></div><p class="hint">Wische seitlich durchs Regal und tippe ein Feld für Details. Kräftige Farben sind gesammelt, blasse fehlen noch, gestrichelte sind frei.</p>'}
+
+function eur(n){return n.toFixed(2).replace(".",",")+" €"}
+function statsHtml(){var G=got(),pr=G.filter(function(c){return c.price>0}),sum=pr.reduce(function(a,c){return a+c.price},0),
+ rt=G.filter(function(c){return c.rating>0}).sort(function(a,b){return b.rating-a.rating}),
+ W=S.cans.filter(function(c){return c.wish&&!c.got&&c.name}),T=S.cans.filter(function(c){return c.name}).length;
+ var h='<div class="pr"><b>Statistik</b><div class="sg"><div><span>'+G.length+'/'+T+'</span><small>gesammelt</small></div><div><span>'+(T?Math.round(G.length/T*100):0)+'%</span><small>Regal voll</small></div><div><span>'+eur(sum)+'</span><small>ausgegeben</small></div><div><span>'+(pr.length?eur(sum/pr.length):"–")+'</span><small>Ø pro Dose</small></div></div><p class="hint">Preise trägst du in den Details einer Dose ein.</p></div>';
+ h+='<div class="pr"><b>Deine Favoriten</b>'+(rt.length?rt.slice(0,3).map(function(c){return'<div class="hint" style="margin-top:6px"><span style="color:var(--tx)">'+esc(c.name)+'</span> '+stars(c.rating)+'</div>'}).join(""):'<p class="hint">Bewerte Dosen, dann erscheinen hier deine Lieblinge.</p>')+'</div>';
+ h+='<div class="pr"><b>Wunschliste</b>'+(W.length?W.map(row).join(""):'<p class="hint">Markiere in den Details einer fehlenden Dose „Auf die Wunschliste".</p>')+'</div>';
+ return h}
+function row(c,rank){
+ var th=c.photo?'<img class="th" src="'+c.photo+'" alt="">':'<div class="th can">'+canIco(col(c.name),26)+'</div>';
+ return'<button class="row'+(c.got?"":" miss")+'" data-id="'+c.id+'" style="border-left:6px solid '+col(c.name)+'">'+th+'<span class="n"><b>'+(c.fav?'★ ':'')+esc(c.name)+'</b><small>'+(c.got?"Gesammelt"+(c.date?" am "+c.date:""):"Noch nicht gescannt")+'</small></span><span class="stars">'+(c.got&&c.rating?stars(c.rating):"")+'</span></button>';
+}
+function open(html){$("card").innerHTML=html;$("sheet").classList.add("open")}
+function closeSheet(){stopCam();stopH5();$("sheet").classList.remove("open")}
+function today(){return new Date().toLocaleDateString("de-DE")}
+
+function detail(id){
+ var c=S.cans.filter(function(x){return x.id==id})[0];if(!c)return;
+ if(!c.name){open('<h2>Freier Platz</h2><input type="text" id="nm" placeholder="Name der Sorte"><br><br><button class="btn pri" id="ok">Speichern</button><button class="btn" id="cl">Abbrechen</button>');$("cl").onclick=closeSheet;$("ok").onclick=function(){var v=$("nm").value.trim();if(!v)return;c.name=v;save();render();detail(id)};return}
+ var pic=c.photo?'<img class="pic" src="'+c.photo+'" alt="">':'<div class="pic">Noch kein Foto</div>';
+ var r="";for(var i=1;i<=5;i++)r+='<button data-s="'+i+'" aria-label="'+i+' Sterne">'+(i<=c.rating?"★":"☆")+'</button>';
+ open('<h2>'+esc(c.name)+'</h2>'+pic+
+ '<label class="btn">Foto aufnehmen<input type="file" accept="image/*" capture="environment" id="ph" hidden></label>'+
+ '<button class="btn'+(c.got?"":" pri")+'" id="tg">'+(c.got?"Als fehlend markieren":"Als gesammelt markieren")+'</button>'+
+ '<div class="rate" id="rt">'+r+'</div>'+
+ '<textarea id="nt" rows="3" placeholder="Wie hat sie geschmeckt?">'+esc(c.note)+'</textarea>'+
+ '<input type="text" inputmode="decimal" id="pr0" placeholder="Preis bezahlt in € (z. B. 1,19)" value="'+(c.price?String(c.price).replace(".",","):"")+'">'+
+ '<button class="btn'+(c.fav?" pri":"")+'" id="fvb">'+(c.fav?"★ Favorit":"☆ Als Favorit markieren")+'</button>'+'<button class="btn'+(c.wish?" pri":"")+'" id="ws">'+(c.wish?"★ Auf der Wunschliste":"☆ Auf die Wunschliste")+'</button>'+
+ '<p class="hint">Barcode: '+(c.code?esc(c.code):"noch keiner verknüpft")+'</p>'+
+ '<button class="btn pri" id="ok">Fertig</button><button class="btn" id="cl">Schließen</button>');
+ $("pr0").onchange=function(){var v=parseFloat(this.value.replace(",","."));c.price=v>0&&v<100?Math.round(v*100)/100:0;save();render()};
+ $("fvb").onclick=function(){c.fav=!c.fav;save();render();detail(id)};
+ $("ws").onclick=function(){c.wish=!c.wish;save();render();detail(id)};
+ $("tg").onclick=function(){c.got=!c.got;c.date=c.got?today():"";save();render();detail(id)};
+ $("rt").onclick=function(e){var s=e.target.getAttribute("data-s");if(!s)return;c.rating=+s;if(!c.got){c.got=true;c.date=today()}save();render();detail(id)};
+ $("ph").onchange=function(){var f=this.files[0];if(f)shrink(f,function(d){c.photo=d;if(!c.got){c.got=true;c.date=today()}save();render();detail(id)})};
+ $("ok").onclick=function(){c.note=$("nt").value;save();closeSheet();render()};
+ $("cl").onclick=function(){c.note=$("nt").value;save();closeSheet()};
+}
+function shrink(file,cb){
+ var im=new Image(),u=URL.createObjectURL(file);
+ im.onload=function(){var m=360,k=Math.min(1,m/Math.max(im.width,im.height)),cv=document.createElement("canvas");cv.width=im.width*k;cv.height=im.height*k;cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(u);cb(cv.toDataURL("image/jpeg",.7))};
+ im.src=u;
+}
+
+var stream=null,timer=null;
+function stopCam(){clearInterval(timer);if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}}
+function scanSheet(){
+ open('<h2>Dose scannen</h2><video id="vd" playsinline muted></video><p class="hint" id="sm">Halte den Barcode hinten auf der Dose ins Bild.</p><input type="text" id="mc" inputmode="numeric" placeholder="Oder Zahlen unter dem Barcode eintippen"><button class="btn pri" id="mb">Code übernehmen</button><button class="btn" id="cl">Schließen</button>');
+ $("cl").onclick=closeSheet;
+ $("mb").onclick=function(){var v=$("mc").value.trim();if(v){stopCam();found(v)}};
+ if(!("BarcodeDetector" in window)||!navigator.mediaDevices){$("vd").style.display="none";$("sm").textContent="Die Kamera-Erkennung geht in diesem Browser nicht (z. B. Safari am iPhone). Tippe den Code unter dem Barcode ein oder wähle die Sorte in der Liste.";return}
+ var det=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e"]});
+ navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}).then(function(s){
+  stream=s;var v=$("vd");v.srcObject=s;v.play();
+  timer=setInterval(function(){det.detect(v).then(function(r){if(r.length){stopCam();found(r[0].rawValue)}}).catch(function(){})},400);
+ }).catch(function(){$("vd").style.display="none";$("sm").textContent="Kamera nicht erlaubt. Erlaube den Zugriff oder tippe den Code ein."});
+}
+function found(code){
+ var c=S.cans.filter(function(x){return x.code==code})[0];
+ if(c){if(!c.got){c.got=true;c.date=today();save();render()}detail(c.id);return}
+ var opts=S.cans.filter(function(x){return x.name}).map(function(x){return'<option value="'+x.id+'">'+esc(x.name)+(x.got?" (schon gesammelt)":"")+'</option>'}).join("");
+ open('<h2>Neue Dose</h2><p class="hint">Code '+esc(code)+' ist noch keiner Sorte zugeordnet. Welche Sorte ist es?</p><select id="sl">'+opts+'</select><br><br><button class="btn pri" id="ok">Zuordnen und abhaken</button><button class="btn" id="cl">Abbrechen</button>');
+ $("cl").onclick=closeSheet;
+ $("ok").onclick=function(){var c=S.cans.filter(function(x){return x.id==$("sl").value})[0];c.code=code;if(!c.got){c.got=true;c.date=today()}save();render();detail(c.id)};
+}
+function addCan(){
+ open('<h2>Eigene Sorte</h2><input type="text" id="nn" placeholder="Name der Sorte"><br><br><button class="btn pri" id="ok">Hinzufügen</button><button class="btn" id="cl">Abbrechen</button>');
+ $("cl").onclick=closeSheet;
+ $("ok").onclick=function(){var n=$("nn").value.trim();if(!n)return;var b=S.cans.filter(function(c){return!c.name})[0];if(b)b.name=n;else{var id=S.cans.reduce(function(m,c){return Math.max(m,c.id)},0)+1;S.cans.push({id:id,name:n,got:false,rating:0,note:"",photo:"",code:"",date:""})}save();closeSheet();render()};
+}
+
+document.addEventListener("click",function(e){
+ var t=e.target.closest("[data-t],[data-f],[data-id],#add,#gz");if(!t)return;
+ if(t.dataset.t){S.tab=t.dataset.t;render()}
+ else if(t.dataset.f){S.f=t.dataset.f;render()}
+ else if(t.dataset.id!==undefined&&!$("sheet").contains(t))detail(t.dataset.id);
+ else if(t.id=="add")addCan();
+ else if(t.id=="gz"){S.sm=!S.sm;render()}
+});
+document.addEventListener("input",function(e){if(e.target.id=="q"){S.q=e.target.value;var p=e.target.selectionStart;render();var q=$("q");q.focus();q.setSelectionRange(p,p)}});
+$("scan").onclick=scanHome;
+$("sheet").onclick=function(e){if(e.target==this)closeSheet()};
+var geo="",gT=0;
+function showMap(ll){var f=$("mf"),c=ll.split(","),la=+c[0],lo=+c[1],d=.02,src="https://www.openstreetmap.org/export/embed.html?bbox="+(lo-d*1.6)+"%2C"+(la-d)+"%2C"+(lo+d*1.6)+"%2C"+(la+d)+"&layer=mapnik&marker="+la+"%2C"+lo;if(f.getAttribute("src")!=src)f.src=src;f.style.display="block";$("lm").textContent="Kartenmitte = dein Ort. Märkte mit Monster findest du über In Maps öffnen."}
+var CH=["Lidl","Netto","REWE","Edeka","E center","Kaufland","Aldi","Penny"];
+function setl(){var p=$("plz").value.trim(),m=$("mk"),h=$("mkh");
+ if(p.length<3){m.innerHTML="";h.textContent="Gib oben Postleitzahl oder Ort ein.";$("l2").style.display="none"}else{
+ m.innerHTML=CH.map(function(c){return'<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/'+encodeURIComponent(c+" "+p)+'">'+chIco(c)+'<span>'+c+'</span></a>'}).join("");
+ h.textContent="Eine Karte direkt in der App erlaubt Claude nicht. Tippe auf einen Markt, dann zeigt Maps die Filialen bei "+p+".";
+ $("l2").style.display="";$("l2").href="https://www.google.com/maps/search/"+encodeURIComponent("Monster Energy kaufen "+p)}
+ if(typeof roffers=="function")roffers()}
+function prl(){var p="";try{p=localStorage.getItem("dd_plz")||""}catch(e){}$("plz").value=p;setl();
+ $("plz").oninput=function(){geo="";try{localStorage.setItem("dd_plz",this.value)}catch(e){}setl()};
+}
+var P={pts:0,red:0,last:null},h5=null,busy=false;
+function pload(){try{var r=localStorage.getItem("dd_pts");if(r)P=JSON.parse(r)}catch(e){}}
+function psave(){try{localStorage.setItem("dd_pts",JSON.stringify(P))}catch(e){}}
+function avail(){return Math.floor(P.pts/100)-P.red}
+function prender(){var a=avail(),m=P.pts%100;
+ $("pt").innerHTML='<b>'+P.pts+' Punkte</b><span class="hint"> 5 pro gescannter Dose, bei 100 gibt es 10 Juwelen</span><div class="bar" style="margin:8px 0"><i style="width:'+m+'%"></i></div><p class="hint">'+(a>0?'Du hast '+a+'× 10 Juwelen abzuholen.':'Noch '+(100-m)+' Punkte bis zu den nächsten 10 Juwelen.')+'</p>'+(a>0?'<button class="btn pri" id="rd1">10 Juwelen abholen</button>':'');
+ var b=$("rd1");if(b)b.onclick=function(){P.red++;P.gems=(P.gems||0)+10;psave();prender();open('<h2>💎 +10 Juwelen</h2><p>Mit 100 Juwelen kaufst du im Shop einen Monster-Gutschein.</p><button class="btn pri" id="cl">Alles klar</button>');$("cl").onclick=closeSheet}}
+function stopH5(){if(h5){var x=h5;h5=null;try{x.stop().then(function(){x.clear()}).catch(function(){})}catch(e){}}}
+function scanSheet2(){
+ open('<h2>Dose scannen</h2><div id="rd" style="width:100%"></div><div id="rd2" hidden></div><p class="hint" id="sm">Halte den Barcode hinten auf der Dose ins Bild.</p><label class="btn pri">Foto vom Barcode<input type="file" accept="image/*" capture="environment" id="bf" hidden></label><button class="btn" id="cl">Schließen</button>');
+ $("cl").onclick=closeSheet;
+ if(typeof Html5Qrcode=="undefined"){$("sm").textContent="Der Scanner konnte nicht geladen werden. Prüfe dein Internet.";return}
+ var F=Html5QrcodeSupportedFormats,o={formatsToSupport:[F.EAN_13,F.EAN_8,F.UPC_A,F.UPC_E],useBarCodeDetectorIfSupported:true};
+ $("bf").onchange=function(){var f=this.files[0];if(!f)return;stopH5();$("sm").textContent="Foto wird gelesen…";
+  new Html5Qrcode("rd2",o).scanFile(f,false).then(onCode).catch(function(){$("sm").textContent="Kein Barcode erkannt. Fotografiere ihn näher und gerade."})};
+ h5=new Html5Qrcode("rd",o);
+ h5.start({facingMode:"environment"},{fps:10,qrbox:{width:260,height:120}},onCode,function(){}).catch(function(){h5=null;$("sm").textContent="Die Live-Kamera geht hier nicht. Tippe auf Foto vom Barcode."})}
+function onCode(code){if(busy)return;busy=true;setTimeout(function(){busy=false},1500);stopH5();code=String(code).trim();
+ var c=S.cans.filter(function(x){return x.name&&(","+x.code+",").indexOf(","+code+",")>-1})[0];
+ if(c)award(c,code);else pick(code)}
+function award(c,code){var now=Date.now(),dup=P.last&&P.last.code==code&&now-P.last.t<60000,before=avail();
+ if(!dup){P.pts+=5;P.last={code:code,t:now}}
+ c.got=true;if(!c.date)c.date=today();psave();save();render();
+ open('<h2>'+esc(c.name)+'</h2><p style="font-size:24px;margin:6px 0"><b>'+(dup?'Schon gezählt':'+5 Punkte')+'</b></p><p class="hint">'+(dup?'Diese Dose hast du gerade schon gescannt.':'Du hast jetzt '+P.pts+' Punkte.')+(avail()>before?' 10 Juwelen warten auf dich!':'')+'</p><button class="btn pri" id="a1">Bewerten</button><button class="btn" id="a2">Nächste Dose scannen</button><button class="btn" id="a3">Fertig</button>');
+ $("a1").onclick=function(){detail(c.id)};$("a2").onclick=scanSheet2;$("a3").onclick=closeSheet}
+function pick(code){var L=S.cans.filter(function(x){return x.name}).sort(function(a,b){return a.got-b.got});
+ open('<h2>Neuer Barcode</h2><p class="hint">Diese Dose kenne ich noch nicht. Tippe einmal auf die Sorte, danach erkennt die App sie automatisch.</p>'+L.map(function(x){return'<button class="row" data-pk="'+x.id+'" style="border-left:6px solid '+col(x.name)+'"><span class="n"><b>'+esc(x.name)+'</b><small>'+(x.got?"Schon gesammelt":"Noch nicht gescannt")+'</small></span></button>'}).join("")+'<button class="btn" id="cl">Abbrechen</button>');
+ $("cl").onclick=closeSheet;
+ [].forEach.call(document.querySelectorAll("#card [data-pk]"),function(b){b.onclick=function(){var c=S.cans.filter(function(x){return x.id==b.getAttribute("data-pk")})[0];c.code=c.code?c.code+","+code:code;save();award(c,code)}})}
+var pend=null;
+function getSample(){try{return window.claude?window.claude.use("sample"):Promise.resolve(null)}catch(e){return Promise.resolve(null)}}
+function prep(file,cb){var im=new Image(),u=URL.createObjectURL(file);im.onload=function(){
+ var k=Math.min(1,900/Math.max(im.width,im.height)),cv=document.createElement("canvas");cv.width=im.width*k;cv.height=im.height*k;cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);
+ var k2=Math.min(1,360/Math.max(cv.width,cv.height)),c2=document.createElement("canvas");c2.width=cv.width*k2;c2.height=cv.height*k2;c2.getContext("2d").drawImage(cv,0,0,c2.width,c2.height);
+ URL.revokeObjectURL(u);var th=c2.toDataURL("image/jpeg",.7);cv.toBlob(function(b){cb(b,th)},"image/jpeg",.85)};im.src=u}
+function onCode(code){if(busy)return;busy=true;setTimeout(function(){busy=false},1500);stopH5();pend={code:String(code).trim(),thumb:""};frontSheet()}
+function frontSheet(){open('<h2>Schritt 2: Vorderseite</h2><p class="hint">Barcode erkannt ('+esc(pend.code)+'). Fotografiere jetzt die Vorderseite der Dose, damit die App die Sorte erkennt. Punkte gibt es erst nach beiden Schritten.</p><label class="btn pri">Foto der Vorderseite<input type="file" accept="image/*" capture="environment" id="fp" hidden></label><button class="btn" id="cl">Abbrechen</button><p class="hint" id="fm"></p>');
+ $("cl").onclick=closeSheet;$("fp").onchange=function(){var f=this.files[0];if(f)recog(f)}}
+function recog(f){var fm=$("fm");fm.textContent="Die Dose wird erkannt…";
+ prep(f,function(blob,th){pend.thumb=th;
+  getSample().then(function(sm){
+   if(!sm)return manual("Die Erkennung ist hier nicht verfügbar. Wähle die Sorte selbst.");
+   var names=S.cans.filter(function(x){return x.name}).map(function(x){return x.name}).join("; ");
+   return sm.json('Das Bild zeigt die Vorderseite einer Getränkedose. Antworte nur mit JSON in dieser Form: {"monster":true,"sorte":"Name","sicher":0.8}. "monster" ist true, wenn es eine Monster-Energy-Dose ist. "sorte" muss genau einer dieser Namen sein, sonst leer: '+names+'. "sicher" ist deine Sicherheit von 0 bis 1. Achte auf Farbe und Schriftzug der Dose.',{images:[blob],modelTier:"quick"}).then(function(r){
+    if(!r||r.monster===false){fm.textContent="Das sieht nicht nach einer Monster-Dose aus. Fotografiere die Vorderseite noch einmal.";return}
+    var c=S.cans.filter(function(x){return x.name&&x.name==r.sorte})[0],
+    lk=S.cans.filter(function(x){return x.name&&(","+x.code+",").indexOf(","+pend.code+",")>-1})[0];
+    if(lk&&c&&lk.id==c.id)done(c);
+    else if(lk&&c)choose([lk,c],"Der Barcode gehört zu "+lk.name+", auf dem Foto sehe ich "+c.name+".");
+    else if(lk)choose([lk],"Der Barcode gehört zu "+lk.name+". Stimmt das?");
+    else if(c&&r.sicher>=0.6)done(c);
+    else manual("Ich konnte die Sorte nicht sicher erkennen. Wähle sie selbst.")})
+  }).catch(function(e){manual(e&&e.code=="not_granted"?"Du hast die Erkennung nicht erlaubt. Wähle die Sorte selbst.":"Die Erkennung hat nicht geklappt. Wähle die Sorte selbst.")})})}
+function done(c){var code=pend.code;if((","+c.code+",").indexOf(","+code+",")<0)c.code=c.code?c.code+","+code:code;if(pend.thumb)c.photo=pend.thumb;award(c,code)}
+function prow(x){return'<button class="row" data-pk="'+x.id+'" style="border-left:6px solid '+col(x.name)+'"><span class="n"><b>'+esc(x.name)+'</b><small>'+(x.got?"Schon gesammelt":"Noch nicht gescannt")+'</small></span></button>'}
+function wirepk(){[].forEach.call(document.querySelectorAll("#card [data-pk]"),function(b){b.onclick=function(){done(S.cans.filter(function(x){return x.id==b.getAttribute("data-pk")})[0])}})}
+function choose(list,msg){open('<h2>Welche Sorte ist es?</h2><p class="hint">'+msg+'</p>'+list.map(prow).join("")+'<button class="btn" id="ot">Andere Sorte</button><button class="btn" id="cl">Abbrechen</button>');
+ $("cl").onclick=closeSheet;$("ot").onclick=function(){manual("Wähle die richtige Sorte.")};wirepk()}
+function manual(msg){var L=S.cans.filter(function(x){return x.name}).sort(function(a,b){return a.got-b.got});
+ open('<h2>Sorte wählen</h2><p class="hint">'+msg+' Die App merkt sich den Barcode dazu.</p>'+L.map(prow).join("")+'<button class="btn" id="cl">Abbrechen</button>');
+ $("cl").onclick=closeSheet;wirepk()}
+var WORLD="Lo-Carb|Lo-Cal|Mega Monster|Import|Ripper|Monarch|Papillon|Punch Mad Dog|Voodoo Grape|Strawberry Lemonade|Strawberry Shot|Strawberry Shot Zero Sugar|Vanilla Shot|Vanilla Shot Zero Sugar|Ultra Sunrise|Ultra Vice Guava|Ultra Blue Hawaiian|Ultra Wild Passion|Ultra Punk Punch|Ultra Red White and Blue Razz|Ultra Citron|Rehab Peach Tea|Rehab Lemonade|Rehab Wild Berry|Rehab Green Tea|Rehab Raspberry Tea|Rehab Orange Tea|Rehab Strawberry Lemonade|Rehab Watermelon|Java Mean Bean|Java Loca Moca|Java Salted Caramel|Java Vanilla Light|Java Irish Creme|Java Triple Shot Mocha|Java Triple Shot French Vanilla|Java Cafe Latte|Java Sweet Black|Java Dubai Chocolate|Killer Brew Loca Moca|Killer Brew Mean Bean|Hydro Purple Passion|Hydro Mango Loco|Hydro Tropical Thunder|Hydro Manic Melon|Reserve Watermelon|Reserve Orange Dreamsicle|Reserve White Pineapple|Reserve Kiwi Strawberry|Reserve Peaches n Creme|Mule Ginger Brew|Mule Mango Loco|Lewis Hamilton Zero Sugar|Nitro Super Dry|Nitro Cosmic Peach".split("|");
+COL.push.apply(COL,[["grape","#8a4dff"],["citron","#e9ff3a"],["lemonade","#f6ff3a"],["peach","#ffb072"],["raspberry","#e0115f"],["orange","#ff9a1f"],["watermelon","#ff5c7a"],["melon","#7ed957"],["kiwi","#7ed957"],["pineapple","#ffd84a"],["berry","#7a3dff"],["guava","#ff6f91"],["passion","#ff5ec4"],["hawaiian","#19c8ff"],["razz","#ff4d6d"],["punk","#ff2fb3"],["punch","#ff3c9e"],["sunrise","#ff8a3d"],["tropical","#19e6c1"],["caramel","#d79a4a"],["vanilla","#f3e3b0"],["creme","#f3e3b0"],["irish","#c49a6c"],["chocolate","#7a4a2a"],["ginger","#c49a6c"],["hamilton","#00d2be"],["monarch","#ff7a1a"],["papillon","#ff7eb6"],["ripper","#ff4a1c"],["import","#c9d1c0"],["nitro","#6b6f78"],["hydro","#19e6c1"],["reserve","#d4af37"],["rehab","#7fd6ff"],["java","#b5753a"],["killer","#b5753a"],["mule","#c49a6c"]]);
+function ensure(){var have={},nid=S.cans.reduce(function(m,c){return Math.max(m,c.id)},0)+1;
+ S.cans.forEach(function(c){if(c.name)have[c.name]=1});
+ function mk(n){return{id:nid++,name:n,got:false,rating:0,note:"",photo:"",code:"",date:""}}
+ WORLD.forEach(function(n){if(have[n])return;have[n]=1;var b=S.cans.filter(function(c){return!c.name})[0];if(b)b.name=n;else S.cans.push(mk(n))});
+ while(S.cans.length<100||S.cans.length%10)S.cans.push(mk(""));
+ save()}
+function goPg(i){var g=$("pg");g.scrollTo({left:i*g.clientWidth,behavior:"smooth"})}
+function fd(t){var d=new Date(t);return d.toLocaleDateString("de-DE")+", "+d.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})}
+function prender(){var a=avail(),m=P.pts%100,H=P.hist||[],C=2*Math.PI*52,off=(C*(1-m/100)).toFixed(1),fl=(m==0&&P.pts>0&&a>0)?100:m;
+ $("pt").innerHTML=flame();var rm=$("rem");if(rm){var dn=P.lastDay==dkey(Date.now()),n0=curStreak();rm.style.display=dn?"none":"block";rm.textContent=n0?"⛓️ Dein Monster ist noch gefesselt! Mach heute ein Foto, sonst verlierst du deine "+n0+" Tage.":"⛓️ Befreie dein Monster: Mach heute ein Foto und starte deine Serie.";rm.onclick=function(){goPg(1)}}
+ $("pt").onclick=function(){goPg(1)};
+ var v="";for(var i=0;i<Math.min(a,5);i++)v+='<div class="vc"><div style="flex:1"><b>💎 10 Juwelen</b><div class="hint">Belohnung für 100 Punkte</div></div><button class="btn pri rd1">Abholen</button></div>';
+ if(!a)v='<p class="hint">Noch keine Juwelen frei. Noch '+(100-m)+' Punkte bis zu 10 Juwelen.</p>';
+ $("p2").innerHTML='<div class="pc"><div class="ring"><svg viewBox="0 0 60 86" role="img" aria-label="Energy-Dose, '+fl+' Prozent gefüllt"><defs><linearGradient id="wg" x1="0" x2="1"><stop offset="0" stop-color="#7d878d"/><stop offset=".22" stop-color="#e9edef"/><stop offset=".4" stop-color="#ffffff"/><stop offset=".7" stop-color="#d5dbde"/><stop offset="1" stop-color="#6f7a80"/></linearGradient><linearGradient id="cy" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".6"/><stop offset=".12" stop-color="#000" stop-opacity=".15"/><stop offset=".26" stop-color="#fff" stop-opacity=".5"/><stop offset=".34" stop-color="#fff" stop-opacity="0"/><stop offset=".75" stop-color="#000" stop-opacity=".12"/><stop offset=".92" stop-color="#000" stop-opacity=".5"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></linearGradient><linearGradient id="rm" x1="0" x2="1"><stop offset="0" stop-color="#8d979c"/><stop offset=".35" stop-color="#f4f6f7"/><stop offset="1" stop-color="#7a858b"/></linearGradient><radialGradient id="sh"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient><clipPath id="cb"><path d="M15 9Q15 7 30 7Q45 7 45 9L45 12Q48 16 48 21V72Q48 78 44 80Q30 83 16 80Q12 78 12 72V21Q12 16 15 12Z"/></clipPath><clipPath id="mfill"><rect x="0" y="'+(80-0.73*fl)+'" width="60" height="'+(0.73*fl+4)+'"/></clipPath></defs><ellipse cx="30" cy="82.5" rx="22" ry="3" fill="url(#sh)"/><g clip-path="url(#cb)"><rect x="0" y="0" width="60" height="86" fill="#1b2218"/><rect x="0" y="0" width="60" height="86" fill="url(#wg)" clip-path="url(#mfill)"/><rect x="10" y="8" width="40" height="76" fill="url(#cy)"/><path d="M13 22V70" stroke="#fff" stroke-opacity=".35" stroke-width=".8" stroke-linecap="round"/><path d="M12 20Q22 17 48 20V22Q22 20 12 23Z" fill="#000" opacity=".22"/><path d="M12 72Q30 76 48 72V80H12Z" fill="#000" opacity=".28"/></g><path d="M15 9Q15 7 30 7Q45 7 45 9L45 12Q48 16 48 21V72Q48 78 44 80Q30 83 16 80Q12 78 12 72V21Q12 16 15 12Z" fill="none" stroke="#c9d0d4" stroke-opacity=".55" stroke-width=".7"/><ellipse cx="30" cy="8.4" rx="15" ry="3.3" fill="url(#rm)" stroke="#59646a" stroke-width=".6"/><ellipse cx="30" cy="8.6" rx="12.6" ry="2.4" fill="#6c777d"/><ellipse cx="30" cy="8.2" rx="12" ry="2" fill="#aeb8bd" opacity=".8"/><path d="M25 7.4h10a2.2 2.2 0 0 1 0 4.2H25a2.2 2.2 0 0 1 0-4.2z" fill="url(#rm)" stroke="#4d585e" stroke-width=".6"/><ellipse cx="30.6" cy="9.5" rx="3" ry="1" fill="#2b3338"/><path d="M24 7.7h12" stroke="#fff" stroke-opacity=".7" stroke-width=".5"/></svg><div class="rn"><b>'+P.pts+'</b><span>Punkte</span></div></div><p style="margin:0">'+(a>0?'10 Juwelen warten auf dich':'Noch '+(100-m)+' Punkte bis zu 10 Juwelen')+'</p></div>'+qBox()+streakBox()+'<h3>Juwelen abholen</h3>'+v+'<h3>Letzte Aktivitäten</h3>'+(H.length?H.map(function(h){return'<div class="hr"><span><b>'+esc(h.n)+'</b><br><small class="hint">'+fd(h.t)+'</small></span><b>'+(h.p?'+'+h.p:'')+'</b></div>'}).join(""):'<p class="hint">Noch nichts gescannt. Scanne deine erste Dose.</p>')+'<p class="hint">Die Gratis-Dose ist eine Belohnung in dieser App. Monster zahlt sie nicht.</p>';
+ [].forEach.call(document.querySelectorAll("#p2 .rd1"),function(b){b.onclick=function(){P.red++;P.gems=(P.gems||0)+10;P.hist=P.hist||[];P.hist.unshift({n:"10 Juwelen erhalten",t:Date.now(),p:0});psave();prender();open('<h2>💎 +10 Juwelen</h2><p>Mit 100 Juwelen kaufst du im Shop einen Monster-Gutschein.</p><button class="btn pri" id="cl">Alles klar</button>');$("cl").onclick=closeSheet}})}
+function award(c,code){var now=Date.now(),dup=P.last&&P.last.code==code&&now-P.last.t<60000,before=avail();
+ if(!dup){P.pts+=5;P.last={code:code,t:now};P.hist=P.hist||[];P.hist.unshift({n:c.name,t:now,p:5});P.hist=P.hist.slice(0,50)}
+ c.got=true;if(!c.date)c.date=today();psave();save();render();
+ open('<h2>'+esc(c.name)+'</h2><p style="font-size:24px;margin:6px 0"><b>'+(dup?'Schon gezählt':'+5 Punkte')+'</b></p><p class="hint">'+(dup?'Diese Dose hast du gerade schon gescannt.':'Du hast jetzt '+P.pts+' Punkte.')+(avail()>before?' 10 Juwelen warten auf dich!':'')+'</p><button class="btn pri" id="a1">Bewerten</button><button class="btn" id="a2">Nächste Dose scannen</button><button class="btn" id="a3">Fertig</button>');
+ $("a1").onclick=function(){detail(c.id)};$("a2").onclick=scanSheet2;$("a3").onclick=closeSheet}
+function done(c){var code=pend.code;pend.wasNew=!c.got;if((","+c.code+",").indexOf(","+code+",")<0)c.code=c.code?c.code+","+code:code;if(pend.thumb)c.photo=pend.thumb;award(c,code)}
+function wrong(c){var code=pend.code,L=S.cans.filter(function(x){return x.name&&x.id!=c.id}).sort(function(a,b){return a.got-b.got});
+ open('<h2>Welche Sorte ist es richtig?</h2>'+L.map(prow).join("")+'<button class="btn" id="cl">Abbrechen</button>');$("cl").onclick=closeSheet;
+ [].forEach.call(document.querySelectorAll("#card [data-pk]"),function(b){b.onclick=function(){var d=S.cans.filter(function(x){return x.id==b.getAttribute("data-pk")})[0];
+  c.code=(","+c.code+",").replace(","+code+",",",").replace(/^,|,$/g,"");if(pend.wasNew){c.got=false;c.date="";c.photo=""}
+  d.code=d.code?d.code+","+code:code;d.got=true;if(!d.date)d.date=today();d.photo=pend.thumb;save();render();detail(d.id)}})}
+function award(c,code){var now=Date.now(),dup=P.last&&P.last.code==code&&now-P.last.t<60000,before=avail();
+ if(!dup){P.pts+=5;P.last={code:code,t:now};P.hist=P.hist||[];P.hist.unshift({n:c.name,t:now,p:5});P.hist=P.hist.slice(0,50)}
+ c.got=true;if(!c.date)c.date=today();psave();save();render();
+ open('<p class="hint" style="margin:0">Erkannt als</p><h2 style="margin:0 0 6px">'+esc(c.name)+'</h2><p style="font-size:24px;margin:6px 0"><b>'+(dup?'Schon gezählt':'+5 Punkte')+'</b></p><p class="hint">'+(dup?'Diese Dose hast du gerade schon gescannt.':'Du hast jetzt '+P.pts+' Punkte.')+(avail()>before?' 10 Juwelen warten auf dich!':'')+'</p><button class="btn pri" id="a1">Bewerten</button><button class="btn" id="a2">Nächste Dose scannen</button><button class="btn" id="a4">Falsch erkannt?</button><button class="btn" id="a3">Fertig</button>');
+ $("a1").onclick=function(){detail(c.id)};$("a2").onclick=scanSheet2;$("a3").onclick=closeSheet;$("a4").onclick=function(){wrong(c)}}
+function scanHome(){open('<h2>Dose scannen</h2><p class="hint">Fotografiere die Vorderseite der Dose. Die KI erkennt die Sorte, ordnet sie zu und du bekommst 5 Punkte.</p><label class="btn pri" style="display:block;text-align:center">Dose fotografieren<input type="file" accept="image/*" capture="environment" id="fp" hidden></label><button class="btn" id="bc">Zusätzlich Barcode scannen</button><button class="btn" id="cl">Schließen</button><p class="hint" id="fm"></p>');
+ $("cl").onclick=closeSheet;$("bc").onclick=scanSheet2;
+ $("fp").onchange=function(){var f=this.files[0];if(f){pend={code:"",thumb:""};recog(f)}}}
+function recog(f){var fm=$("fm");fm.textContent="Die Dose wird erkannt…";
+ prep(f,function(blob,th){pend.thumb=th;
+  getSample().then(function(sm){
+   if(!sm)throw{code:"nicht_verfuegbar"};
+   var names=S.cans.filter(function(x){return x.name}).map(function(x){return x.name}).join("; ");
+   return sm('Das Bild zeigt die Vorderseite einer Getränkedose. Antworte nur mit JSON in dieser Form: {"monster":true,"sorte":"Name","sicher":0.8}. "monster" ist true, wenn es eine Monster-Energy-Dose ist. "sorte" muss genau einer dieser Namen sein, sonst leer: '+names+'. "sicher" ist deine Sicherheit von 0 bis 1. Achte auf Farbe und Schriftzug der Dose.',{images:[blob],modelTier:"quick"}).then(function(x){
+    var m=String(x.text||"").match(/\{[\s\S]*\}/);if(!m)throw{code:"antwort_unlesbar"};var r=JSON.parse(m[0]);
+    if(r.monster===false){fm.textContent="Das sieht nicht nach einer Monster-Dose aus. Fotografiere die Vorderseite noch einmal.";return}
+    var nm=String(r.sorte||"").trim().toLowerCase(),c=S.cans.filter(function(x){return x.name&&x.name.toLowerCase()==nm})[0],
+    lk=pend.code?S.cans.filter(function(x){return x.name&&(","+x.code+",").indexOf(","+pend.code+",")>-1})[0]:null;
+    if(lk&&c&&lk.id==c.id)done(c);
+    else if(lk&&c)choose([lk,c],"Der Barcode gehört zu "+lk.name+", auf dem Foto sehe ich "+c.name+".");
+    else if(lk)choose([lk],"Der Barcode gehört zu "+lk.name+". Stimmt das?");
+    else if(c&&r.sicher>=0.5)done(c);
+    else manual("Ich konnte die Sorte nicht sicher erkennen. Wähle sie selbst.")})
+  }).catch(function(e){manual("Die Erkennung hat nicht geklappt ("+(e&&e.code||"Fehler")+"). Wähle die Sorte selbst.")})})}
+function done(c){var code=pend.code;pend.wasNew=!c.got;if(code&&(","+c.code+",").indexOf(","+code+",")<0)c.code=c.code?c.code+","+code:code;if(pend.thumb)c.photo=pend.thumb;award(c,code||("foto"+Date.now()))}
+function dkey(t){var x=new Date(t);return x.getFullYear()+"-"+("0"+(x.getMonth()+1)).slice(-2)+"-"+("0"+x.getDate()).slice(-2)}
+function curStreak(){var t=dkey(Date.now()),y=dkey(Date.now()-864e5);return(P.lastDay==t||P.lastDay==y)?(P.streak||0):0}
+function monStage(n){return n>=30?4:n>=14?3:n>=7?2:n>=3?1:0}
+var MONN=["Baby-Monster","Jung-Monster","Kampf-Monster","Flügel-Monster","Monster-König"];
+function mon(n,ok,px){var st=monStage(n),fr=ok&&n>0,u="m"+st+(fr?"f":"c"),x='',
+ c1=fr?'var(--ac2)':'#b9bec3',c2=fr?'var(--ac)':'#80868c',c3=fr?'var(--ac3)':'#464b50',
+ mir=function(a){return a.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g,function(m,a1,b1){return(140-a1)+" "+b1})},
+ both=function(d,f){return'<path d="'+d+'" '+f+'/><path d="'+mir(d)+'" '+f+'/>'};
+ x+='<defs><radialGradient id="b'+u+'" cx=".35" cy=".28" r=".85"><stop offset="0" style="stop-color:'+c1+'"/><stop offset=".5" style="stop-color:'+c2+'"/><stop offset="1" style="stop-color:'+c3+'"/></radialGradient>'
+ +'<radialGradient id="a'+u+'" cx=".5" cy=".5" r=".5"><stop offset="0" style="stop-color:'+c2+';stop-opacity:.55"/><stop offset="1" style="stop-color:'+c2+';stop-opacity:0"/></radialGradient>'
+ +'<radialGradient id="e'+u+'" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#fffbe0"/><stop offset="1" stop-color="#d8c27a"/></radialGradient>'
+ +'<linearGradient id="h'+u+'" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f3ecd8"/><stop offset="1" stop-color="#8d836a"/></linearGradient>'
+ +'<linearGradient id="k'+u+'" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#e5e8ea"/><stop offset=".5" stop-color="#8e969b"/><stop offset="1" stop-color="#3b4044"/></linearGradient>'
+ +'<pattern id="t'+u+'" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="1.1" fill="#000" fill-opacity=".14"/></pattern></defs>';
+ var B='fill="url(#b'+u+')" stroke="#000" stroke-opacity=".45" stroke-width="1.2"',T='fill="url(#t'+u+')"',DK='fill="#000" fill-opacity=".28"';
+ if(st>=3)x+='<circle cx="70" cy="70" r="66" fill="url(#a'+u+')"/>';
+ x+='<ellipse cx="70" cy="123" rx="42" ry="6" fill="#000" fill-opacity=".45"/>';
+ if(st>=3){var w='M34 62C10 50-6 28 0 4C10 14 18 18 26 20C22 30 30 40 36 46Z';x+=both(w,'fill="#000" fill-opacity=".55" stroke="'+(fr?'var(--ac3)':'#555a5f')+'" stroke-width="1.6"')+both('M34 60C20 44 10 28 4 10M30 56C26 42 22 32 22 22','fill="none" stroke="#000" stroke-opacity=".6" stroke-width="1.2"')}
+ x+=both('M42 96Q34 112 38 122L58 122Q62 108 60 96Z',B)+both('M42 96Q34 112 38 122L58 122Q62 108 60 96Z',T);
+ x+=both('M38 122L36 127L42 123L44 128L48 123L51 128L54 122Z','fill="url(#h'+u+')"');
+ var tr='M70 52C98 50 112 72 108 98C104 116 88 120 70 120C52 120 36 116 32 98C28 72 42 50 70 52Z';
+ x+='<path d="'+tr+'" '+B+'/><path d="'+tr+'" '+T+'/><ellipse cx="70" cy="94" rx="19" ry="22" fill="#fff" fill-opacity="'+(fr?.22:.16)+'"/><path d="M52 84Q70 90 88 84M50 94Q70 100 90 94M52 104Q70 110 88 104" stroke="#000" stroke-opacity=".2" stroke-width="1.4" fill="none"/>';
+ var arm='M36 66C20 70 14 88 20 104C26 108 34 106 36 98C34 88 38 78 44 72Z';
+ x+=both(arm,B)+both(arm,T);
+ if(st>=2)x+='<ellipse cx="32" cy="70" rx="12" ry="10" '+B+'/><ellipse cx="108" cy="70" rx="12" ry="10" '+B+'/>';
+ x+=both('M18 104L14 112L21 107L22 114L26 107L30 112L30 104Z','fill="url(#h'+u+')" stroke="#000" stroke-opacity=".4" stroke-width=".6"');
+ var hd='M70 12C92 12 106 28 104 46C102 62 88 70 70 70C52 70 38 62 36 46C34 28 48 12 70 12Z';
+ var hs=1+.14*st;
+ x+='<g transform="translate(46 24) scale('+hs+') translate(-46 -24)"><path d="M46 26C34 22 24 12 28-2C38 4 46 10 56 20Z" fill="url(#h'+u+')" stroke="#000" stroke-opacity=".5" stroke-width="1"/></g><g transform="translate(94 24) scale('+hs+') translate(-94 -24)"><path d="M94 26C106 22 116 12 112-2C102 4 94 10 84 20Z" fill="url(#h'+u+')" stroke="#000" stroke-opacity=".5" stroke-width="1"/></g>';
+ if(st>=2)x+='<path d="M60 14L70-6L80 14Z" fill="url(#h'+u+')"/><path d="M30 60L18 48L40 56Z M110 60L122 48L100 56Z" fill="url(#h'+u+')"/>';
+ x+='<path d="'+hd+'" '+B+'/><path d="'+hd+'" '+T+'/><ellipse cx="54" cy="26" rx="14" ry="7" fill="#fff" fill-opacity=".25"/>';
+ if(st>=4)x+='<path d="M48 16L50 0L60 10L70-6L80 10L90 0L92 16Z" fill="#ffcf33" stroke="#9a6b00" stroke-width="1.2"/><circle cx="70" cy="9" r="3" fill="#ff3b5c"/>';
+ if(fr){
+  x+='<path d="M42 40Q54 32 66 42M98 40Q86 32 74 42" stroke="#000" stroke-opacity=".7" stroke-width="5" stroke-linecap="round" fill="none"/>';
+  [54,86].forEach(function(cx){x+='<ellipse cx="'+cx+'" cy="48" rx="9" ry="7" fill="url(#e'+u+')" stroke="#000" stroke-width="1.2"/><circle cx="'+(cx+(cx<70?1:-1))+'" cy="49" r="4.6" style="fill:var(--ac)"/><ellipse cx="'+(cx+(cx<70?1:-1))+'" cy="49" rx="1.4" ry="4.4" fill="#000"/><circle cx="'+(cx-2)+'" cy="46.5" r="1.3" fill="#fff"/>'});
+  x+='<ellipse cx="66" cy="57" rx="1.6" ry="1.1" fill="#000" fill-opacity=".7"/><ellipse cx="74" cy="57" rx="1.6" ry="1.1" fill="#000" fill-opacity=".7"/>';
+  x+='<path d="M46 62Q70 82 94 62Q70 68 46 62Z" fill="#2a0a10" stroke="#000" stroke-width="1.2"/><ellipse cx="70" cy="71" rx="9" ry="3" fill="#d6405a"/>';
+  x+='<path d="M50 63L54 74L58 64Z M82 64L86 74L90 63Z M60 65L62 70L65 66Z M75 66L78 70L80 65Z" fill="#fffdf0" stroke="#000" stroke-opacity=".4" stroke-width=".6"/><path d="M62 74L64 68L67 74Z M73 74L76 68L78 74Z" fill="#fffdf0"/>';
+  x+='<path d="M8 90L2 86M10 80L3 80M12 70L6 73M132 90L138 86M130 80L137 80M128 70L134 73" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".7"/><ellipse cx="22" cy="114" rx="5" ry="3" fill="none" stroke="url(#k'+u+')" stroke-width="2.4"/><ellipse cx="118" cy="114" rx="5" ry="3" fill="none" stroke="url(#k'+u+')" stroke-width="2.4"/>';
+ }else{
+  x+='<path d="M42 44Q54 40 66 46M98 44Q86 40 74 46" stroke="#000" stroke-opacity=".5" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M46 50Q54 57 62 50M78 50Q86 57 94 50" stroke="#22262a" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M60 66Q70 70 80 66" stroke="#22262a" stroke-width="3" fill="none" stroke-linecap="round"/><text x="100" y="22" font-size="14" font-weight="800" fill="#cfd5da" font-family="system-ui">z</text><text x="108" y="12" font-size="10" font-weight="800" fill="#cfd5da" font-family="system-ui">z</text>';
+  var link=function(cx,cy,r){return'<ellipse cx="'+cx+'" cy="'+cy+'" rx="6.2" ry="3.6" transform="rotate('+r+' '+cx+' '+cy+')" fill="none" stroke="url(#k'+u+')" stroke-width="2.6"/>'};
+  for(var q=0;q<6;q++){x+=link(38+q*13,72+q*6,24)+link(102-q*13,72+q*6,-24)}
+  x+='<path d="M64 88a6 8 0 0 1 12 0" fill="none" stroke="#9aa0a6" stroke-width="3"/><rect x="60" y="88" width="20" height="16" rx="3" fill="url(#k'+u+')" stroke="#22262a" stroke-width="1.4"/><circle cx="70" cy="95" r="2.4" fill="#22262a"/>';
+  x+='<ellipse cx="27" cy="100" rx="7" ry="4" fill="none" stroke="url(#k'+u+')" stroke-width="2.6"/><ellipse cx="113" cy="100" rx="7" ry="4" fill="none" stroke="url(#k'+u+')" stroke-width="2.6"/>';
+ }
+ return'<svg class="mst'+(fr?' fr':'')+'" viewBox="-6 -8 152 144" width="'+px+'" height="'+Math.round(px*144/152)+'" aria-hidden="true">'+x+'</svg>'}
+function flame(){var n=curStreak(),ok=P.lastDay==dkey(Date.now());return'<span class="fl'+(n&&!ok?' dim':'')+(n?'':' off')+'" title="Serie: '+n+' Tage">'+mon(n,ok,30)+'<b>'+n+'</b></span>'}
+function streakBox(){var n=curStreak(),t=dkey(Date.now()),ok=P.lastDay==t,sp=P.sp||{},d='',W=["So","Mo","Di","Mi","Do","Fr","Sa"],
+ done=function(k){return sp[k]||(n>0&&k<=P.lastDay&&k>dkey(Date.now()-(n+1)*864e5))};
+ for(var i=6;i>=0;i--){var dt=new Date(Date.now()-i*864e5),k=dkey(dt.getTime()),on=done(k);
+  d+='<div class="sdc"><span class="sdl">'+(i==0?"Heute":W[dt.getDay()])+'</span>'+(sp[k]?'<img class="sd on" src="'+sp[k]+'" alt="">':'<span class="sd'+(on?' on f':'')+(i==0&&!on?' now':'')+'">'+(on?'⚡':'')+'</span>')+'</div>'}
+ return'<div class="pr sk'+(ok?' ok':'')+'"><div class="sk1"><div class="mob'+(ok?' ok':'')+'">'+mon(n,ok,Math.min(250,100+n*5))+'</div><div><div class="skn">'+n+'</div><div class="skt">'+(n==1?'Tag':'Tage')+' in Folge</div><div class="hint">'+MONN[monStage(n)]+(ok&&n?' · befreit':' · gefesselt')+(monStage(n)<4?'. Noch '+([3,7,14,30][monStage(n)]-n)+' Tage bis zur nächsten Stufe.':'')+'</div></div></div><div class="sdr">'+d+'</div><p class="hint">'+(ok?'Heutiges Foto ist drin. Dein Monster ist frei. Komm morgen wieder, damit es nicht wieder gefesselt wird.':n==0?'Mach jeden Tag ein Foto von deiner Dose, um eine Serie zu starten.':'Mach heute noch ein Foto, sonst ist deine Serie vorbei.')+'</p>'+(ok?'':'<div class="skb"><label class="btn pri">📷 Streak-Foto machen<input type="file" accept="image/*" capture="environment" id="sf" hidden></label></div>')+'</div>'}
+document.addEventListener("change",function(e){var el=e.target;if(!el||el.id!=="sf"||!el.files||!el.files[0])return;var f=el.files[0];el.value="";
+ open('<h2>Streak-Foto</h2><p class="hint" id="sm2">Foto wird geprüft…</p>');
+ if(!fresh(f)){var mm=$("sm2");if(mm)mm.textContent=FRESHMSG;return}
+ prep(f,function(b,th){var fin=function(){pend={code:"",thumb:th};bumpStreak(th);var m=$("sm2");if(m)m.innerHTML='⚡ Dein Monster ist befreit! '+P.streak+(P.streak==1?' Tag':' Tage')+' in Folge!<br><button class="btn pri" id="sx">Super</button>';var x=$("sx");if(x)x.onclick=closeSheet};
+  fraud(b,"dose").then(function(fr){if(!fr.ok&&!fr.err){var m=$("sm2");if(m)m.innerHTML=esc(fr.msg)+'<br><button class="btn" id="sx">OK</button>';var y=$("sx");if(y)y.onclick=closeSheet;return null}return getSample()}).then(function(s){if(s===null)return;if(!s)return fin();
+   return s("Zeigt dieses Foto eine Getränkedose (z.B. Energy Drink)? Antworte nur mit JA oder NEIN.",{images:[b],modelTier:"quick"}).then(function(x){
+    if(/^\s*nein/i.test((x&&x.text)||"")){var m=$("sm2");if(m)m.innerHTML='Auf dem Foto ist keine Dose zu sehen. Versuch es nochmal.<br><button class="btn" id="sx">OK</button>';var y=$("sx");if(y)y.onclick=closeSheet}else fin()})
+  }).catch(fin)})});
+function bumpStreak(th){var t=dkey(Date.now()),y=dkey(Date.now()-864e5);
+ if(P.lastDay!=t){P.streak=(P.lastDay==y?(P.streak||0):0)+1;P.lastDay=t}
+ if(!P.sp)P.sp={};if(th)P.sp[t]=th;var ks=Object.keys(P.sp).sort();while(ks.length>14)delete P.sp[ks.shift()];
+ psave();prender();var a=$("a1");if(a&&a.parentNode){var h=document.createElement("p");h.className="hint";h.textContent="⚡ "+P.streak+(P.streak==1?" Tag":" Tage")+" in Folge";a.parentNode.insertBefore(h,a)}}
+var _aw=award;award=function(c,code){var b0=P.pts;_aw(c,code);if(P.pts>b0)bumpStreak(pend&&pend.thumb);var b=$("a2");if(b)b.onclick=scanHome};
+
+var GP=100;
+function sdayOk(){return P.vday!=dkey(Date.now())}
+function srender(){var g=P.gems||0,V=P.vch||[],un=V.filter(function(v){return!v.used}).length,h='';
+ h+='<h3 class="shh"><span>Shop</span></h3><div class="pr bal" style="text-align:center"><span class="sp" style="left:14%;top:18%">✦</span><span class="sp" style="right:12%;top:26%;animation-delay:.8s">✦</span><span class="sp" style="left:24%;bottom:30%;animation-delay:1.5s;font-size:10px">✦</span><span class="hint" style="color:#bcd8ff">Deine Juwelen</span><div class="gv"><i class="gem"></i><span>'+g+'</span></div><p class="hint">Juwelen bekommst du über Punkte: 100 Punkte = 10 Juwelen.</p></div>';
+ h+='<div class="pr offer"><div class="ofh"><span class="oft">🎟</span><div><b>Monster-Gutschein</b><div class="hint">für eine Dose deiner Wahl</div></div></div><p class="hint">100 Juwelen = 1 Gutschein. Pro Tag kannst du einen kaufen, und du kannst höchstens 3 offene Gutscheine haben.</p><button class="btn pri" id="bv"'+(g<GP||!sdayOk()||un>=3?' disabled':'')+'><i class="gem"></i> Für '+GP+' Juwelen kaufen</button><p class="hint">'+(g<GP?'Dir fehlen noch '+(GP-g)+' Juwelen.':!sdayOk()?'Heute hast du schon einen gekauft. Morgen geht der nächste.':un>=3?'Löse erst einen Gutschein ein.':'')+'</p></div>';
+ h+='<div class="pr"><b>Deine Gutscheine</b>';
+ if(!V.length)h+='<p class="hint">Noch keine Gutscheine.</p>';
+ V.forEach(function(v,i){h+='<div class="tk'+(v.used?' used':'')+'"><div style="flex:1"><b>🎟 Monster-Gutschein'+(v.used?' (eingelöst)':'')+'</b><div class="hint">'+new Date(v.t).toLocaleDateString("de-DE")+'</div></div>'+(v.used?'':'<button class="btn pri vu" data-i="'+i+'">Einlösen</button>')+'</div>'});
+ h+='</div><div class="pr"><b>Juwelen kaufen</b><p class="hint">Nur Vorschau zum Ansehen. Es gibt hier kein Konto und keine Bezahlung, ein Tipp bucht nichts ab.</p>';
+ h+='<div class="pkg">';[[100,"2,49 €","",1,"t1"],[550,"12,99 €","Beliebt",3,"t2"],[1200,"27,99 €","Bestwert",5,"t3"]].forEach(function(k){var gi="";for(var z=0;z<k[3];z++)gi+='<i class="gem g'+z+'"></i>';h+='<div class="pkc '+k[4]+'">'+(k[2]?'<span class="rb">'+k[2]+'</span>':'')+'<div class="gp">'+gi+'</div><span class="n">'+k[0]+'</span><button class="btn pk" data-g="'+k[0]+'">'+k[1]+'</button></div>'});h+='</div></div>';
+ $("p4").innerHTML=h;[].forEach.call(document.querySelectorAll("#p4 .pk"),function(x){x.onclick=function(){open('<h2>Nur Vorschau</h2><p>Der Kauf von '+this.dataset.g+' Juwelen ist hier nicht möglich. Es wurde nichts abgebucht und nichts gutgeschrieben.</p><button class="btn pri" id="cl">OK</button>');$("cl").onclick=closeSheet}});
+ var b=$("bv");if(b)b.onclick=function(){if((P.gems||0)<GP||!sdayOk())return;P.gems-=GP;P.vday=dkey(Date.now());P.vch=P.vch||[];P.vch.push({t:Date.now(),used:false});P.hist=P.hist||[];P.hist.unshift({n:"Gutschein gekauft",t:Date.now(),p:0});psave();prender();open('<h2>Gutschein gekauft</h2><p>Er liegt in deinen Gutscheinen im Shop.</p><button class="btn pri" id="cl">Super</button>');$("cl").onclick=closeSheet};
+ [].forEach.call(document.querySelectorAll("#p4 .vu"),function(x){x.onclick=function(){var i=+this.dataset.i;open('<h2>Gutschein einlösen?</h2><p>Löse ihn erst ein, wenn du die Dose wirklich kaufst oder trinkst. Danach ist er weg.</p><button class="btn pri" id="y">Ja, einlösen</button><button class="btn" id="cl">Abbrechen</button>');$("cl").onclick=closeSheet;$("y").onclick=function(){if(P.vch[i]&&!P.vch[i].used){P.vch[i].used=true;psave();prender()}closeSheet()}}})}
+var _pr0=prender;prender=function(){_pr0();srender()};
+var _aw2=award;award=function(c,code){var b0=P.pts,t=dkey(Date.now());if(!P.dc||P.dc.d!=t)P.dc={d:t,n:0};_aw2(c,code);if(P.pts>b0){if(P.dc.n>=10){P.pts=b0;if(P.hist&&P.hist[0]&&P.hist[0].p==5)P.hist.shift();psave();prender();open('<h2>Tageslimit erreicht</h2><p>Pro Tag zählen höchstens 10 gescannte Dosen für Punkte. Morgen geht es weiter.</p><button class="btn pri" id="cl">OK</button>');$("cl").onclick=closeSheet}else{P.dc.n++;psave()}}};
+
+var QP=["eine Dose mit grünem Design","eine weiße Dose","eine Dose in deiner Hand","eine Dose neben etwas Rotem","eine Dose draußen","eine Dose mit „Zero“ im Namen","eine Dose auf einem Tisch","eine Dose im Kühlschrank oder Regal","eine Dose mit etwas Blauem im Bild","eine Dose neben einem Schuh","eine Dose neben einer Pflanze","eine Dose, die du von oben fotografierst","eine Dose mit einem Strohhalm oder Glas daneben","eine Dose auf dem Boden","eine Dose neben einem Handy"];
+function qHash(str){var h=0;for(var i=0;i<str.length;i++)h=(h*31+str.charCodeAt(i))>>>0;return h}
+function qToday(){var t=dkey(Date.now());if(!P.q||P.q.d!=t)P.q={d:t,done:[false,false,false],h:["","",""]};
+ if(!P.q.n||P.q.n.length!=3){var gotN={};S.cans.forEach(function(c){if(c.got)gotN[c.name]=1});var qd=P.qd||[];
+ var pool=GER.filter(function(n){return!gotN[n]&&qd.indexOf(n)<0});
+ if(pool.length<3)pool=GER.filter(function(n){return!gotN[n]});
+ if(pool.length<3)pool=GER.filter(function(n){return qd.slice(-12).indexOf(n)<0});
+ var h=qHash(t),ix=[],gd=0;while(ix.length<3&&ix.length<pool.length&&gd++<500){h=(Math.imul(h,1664525)+1013904223)>>>0;var k=(h>>>8)%pool.length;if(ix.indexOf(k)<0)ix.push(k)}for(var z=0;ix.length<3&&ix.length<pool.length&&z<pool.length;z++){if(ix.indexOf(z)<0)ix.push(z)}P.q.n=ix.map(function(k){return pool[k]})}return P.q}
+function monsti(){return'<svg class="mo" viewBox="0 0 120 110" aria-hidden="true"><defs><radialGradient id="mb" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#c9a8ff"/><stop offset=".6" stop-color="#8f5cf0"/><stop offset="1" stop-color="#5a2fc0"/></radialGradient><linearGradient id="mc" x1="0" x2="1"><stop offset="0" stop-color="#9fa8ad"/><stop offset=".4" stop-color="#f4f6f7"/><stop offset="1" stop-color="#8d979c"/></linearGradient></defs><ellipse cx="52" cy="104" rx="30" ry="5" fill="#000" opacity=".3"/><path d="M26 30L16 8l24 12zM76 28l10-22-26 14z" fill="#ffd15c" stroke="#b8860b" stroke-width="2" stroke-linejoin="round"/><path d="M52 18c-26 0-38 20-38 46 0 24 14 38 38 38s38-14 38-38c0-26-12-46-38-46z" fill="url(#mb)" stroke="#3a1a86" stroke-width="3"/><g fill="#a97bff" opacity=".9"><circle cx="24" cy="70" r="3"/><circle cx="30" cy="84" r="2.5"/><circle cx="78" cy="88" r="3"/></g><ellipse cx="52" cy="78" rx="22" ry="17" fill="#e6d8ff" opacity=".7"/><path d="M30 46q8-8 16 0" fill="none" stroke="#1d1233" stroke-width="4" stroke-linecap="round"/><circle cx="64" cy="46" r="10" fill="#fff" stroke="#1d1233" stroke-width="2.5"/><circle cx="67" cy="47" r="5" fill="#1d1233"/><circle cx="69" cy="45" r="1.8" fill="#fff"/><ellipse cx="22" cy="60" rx="6" ry="4" fill="#ff7aa8" opacity=".6"/><ellipse cx="78" cy="62" rx="6" ry="4" fill="#ff7aa8" opacity=".6"/><g transform="translate(12 16)"><g class="can"><g transform="rotate(-24 88 62)"><rect x="74" y="34" width="26" height="46" rx="5" fill="url(#mc)" stroke="#4a5358" stroke-width="2"/><rect x="74" y="34" width="26" height="8" rx="4" fill="#cfd6d9" stroke="#4a5358" stroke-width="2"/><rect x="77" y="52" width="20" height="14" rx="3" fill="#7ee03a" opacity=".9"/><path d="M82 59l3-4v3h4l-3 5v-3h-4z" fill="#14340a" opacity=".0"/></g></g></g><path d="M66 78q12 4 26-6" fill="none" stroke="#5a2fc0" stroke-width="9" stroke-linecap="round"/><path d="M66 78q12 4 26-6" fill="none" stroke="#8f5cf0" stroke-width="5" stroke-linecap="round"/><circle cx="94" cy="71" r="6" fill="#8f5cf0" stroke="#3a1a86" stroke-width="2"/><path d="M52 62q-8 0-8 6q0 5 8 5q8 0 8-5q0-6-8-6z" fill="#3a1766"/><path d="M47 69q5 4 10 0q-5-2-10 0z" fill="#ff6f9c"/><g class="dr" fill="#7ee03a"><circle cx="60" cy="76" r="2.2"/><circle cx="58" cy="84" r="1.8"/></g><path d="M34 90l-6 10M70 92l4 10" stroke="#5a2fc0" stroke-width="8" stroke-linecap="round"/></svg>'}
+function qBox(){var q=qToday(),n=q.done.filter(Boolean).length,h='<div class="pr qb"><div class="qh">'+monsti()+'<div><b>Consti Monsti</b><div class="hint">'+(n==3?'Lecker, alle drei Sorten für heute sind geschafft!':'Heute habe ich Lust auf diese drei Sorten. Fotografierst du sie für mich?')+'</div></div></div>';
+ q.n.forEach(function(nm,i){h+='<div class="qr'+(q.done[i]?' d':'')+'"><span class="qc">'+(q.done[i]?'✓':i+1)+'</span><div class="qt">Fotografiere die Sorte<br><span style="color:var(--ac)">'+esc(nm)+'</span><small>Belohnung: 1 <i class="gem"></i> (mit Kassenbon)</small></div>'+(q.done[i]?'':'<label class="btn pri">📷<input type="file" accept="image/*" capture="environment" class="qf" data-q="'+i+'" hidden></label>')+'</div>'});
+ return h+'<p class="hint" id="qm"></p></div>'}
+document.addEventListener("change",function(e){var el=e.target;if(!el||!el.classList||!el.classList.contains("qf")||!el.files||!el.files[0])return;var f=el.files[0],i=+el.dataset.q;el.value="";var q=qToday();if(q.done[i])return;
+ var say=function(t,ok){var m=$("qs");if(m)m.innerHTML=t+'<br><button class="btn pri" id="qx">'+(ok?"Super":"OK")+'</button>';var x=$("qx");if(x)x.onclick=closeSheet};
+ prep(f,function(b,th){var go=function(){open('<h2>Consti Monsti schaut hin…</h2><p class="hint" id="qs">Ich prüfe dein Foto.</p>');if(!fresh(f))return say(FRESHMSG);var key=b.size+":"+th.slice(150,230);if(q.h.indexOf(key)>-1&&key){return say("Dieses Foto hast du heute schon benutzt. Mach ein neues.")}
+  fraud(b,"dose").then(function(fr){if(!fr.ok){say(fr.msg);return}return getSample()}).then(function(s){if(s===undefined)return;if(!s)return say("Die KI ist gerade nicht erreichbar. Versuch es später nochmal.");
+   var task=q.n[i];
+   return s('Prüfe das Foto streng. Aufgabe: Es soll eine Monster-Energy-Dose der Sorte \"'+task+'\" zeigen. Lies die Aufschrift und die Farbe der Dose. Antworte nur mit JSON: {"dose":true/false,"erfuellt":true/false}. dose = es ist eine Getränkedose zu sehen. erfuellt = es ist genau diese Sorte.',{images:[b],modelTier:"quick"}).then(function(x){
+    var t=(x&&x.text)||"",ok=false;try{var j=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1));ok=j.dose===true&&j.erfuellt===true}catch(er){}
+    if(!ok)return say("Das ist nicht die gesuchte Sorte oder man erkennt sie nicht gut. Fotografiere die Vorderseite näher.");
+    var q2=qToday();if(q2.done[i])return closeSheet();var rc0=P.rc&&P.rc[P.rcCur];if(!rc0||rc0.u>=rc0.m)return say("Dieser Bon ist schon aufgebraucht. Jede Dose auf dem Bon zählt nur einmal.");rc0.u++;q2.done[i]=true;var qn=q2.n[i];P.qd=P.qd||[];if(P.qd.indexOf(qn)<0)P.qd.push(qn);if(P.qd.length>200)P.qd.shift();S.cans.forEach(function(c){if(c.name==qn&&!c.got){c.got=true;c.date=today()}});save();render();q2.h[i]=key;P.gems=(P.gems||0)+1;P.hist=P.hist||[];P.hist.unshift({n:"Quest geschafft",t:Date.now(),p:0});psave();prender();say("Yay! +1 💎 für dich.",true)})
+  }).catch(function(){say("Die Prüfung hat nicht geklappt. Versuch es später nochmal.")})};var cu0=P.rc&&P.rcCur&&P.rc[P.rcCur];if(cu0&&cu0.u<cu0.m)go();else rcSheet(go,null,true)})});
+
+
+/* Betrugs-KI */
+function fresh(f){var a=Date.now()-(f&&f.lastModified||0);return !(f&&f.lastModified>0&&a>20*60*1000)}
+var FRESHMSG="Das Foto ist nicht frisch aufgenommen. Mach es jetzt direkt mit der Kamera.";
+function fraud(b,kind){return getSample().then(function(sm){if(!sm)return{ok:false,msg:"Ohne Prüfung gibt es keine Punkte. Versuch es später nochmal.",err:true};
+ var lg=LANG=="en"?"Englisch":LANG=="fr"?"Französisch":"Deutsch";
+ if(kind=="prof")return sm('Das Bild soll ein echter, unveränderter Screenshot eines Social-Media-Profils sein. Lehne ab (echt=false), wenn es sichtbar bearbeitet oder gefälscht ist (unterschiedliche Schriftarten, verschobene Zahlen, Bearbeitungsspuren, Montage) oder gar kein Profil zeigt. Antworte nur mit JSON: {"echt":true/false,"grund":"ein kurzer Satz auf Deutsch"}.',{images:[b],modelTier:"quick"}).then(function(x){var t=(x&&x.text)||"",j=null;try{j=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}catch(e){}if(!j)return{ok:false,msg:"Die Prüfung hat nicht geklappt. Versuch es später nochmal.",err:true};return j.echt===true?{ok:true}:{ok:false,msg:"Screenshot abgelehnt: "+String(j.grund||"").slice(0,140)}}).catch(function(){return{ok:false,msg:"Die Prüfung hat nicht geklappt. Versuch es später nochmal.",err:true}});
+ return sm('Du bist ein strenger Betrugsprüfer für eine Sammel-App. Art des Fotos: '+(kind=="bon"?"Kassenbon":"Getränkedose")+'. Lehne ab (echt=false), wenn eines davon zutrifft: Foto eines Bildschirms (Pixelraster, Moiré, Bildschirmrand, Spiegelung), Screenshot, Foto eines anderen Fotos oder Ausdrucks, Bild aus dem Internet oder Stockfoto, KI-generiert oder sichtbar bearbeitet, '+(kind=="bon"?"handgeschriebener, nachgemachter oder leerer Bon, unlogische Summen oder gemischte Schriftarten, Bon kopiert oder zerschnitten":"Zeichnung, Spielzeug oder Modell statt einer echten Dose, Dose in einem Shop-Regal ohne Kauf erkennbar")+'. Antworte nur mit JSON: {"echt":true/false,"grund":"ein kurzer Satz auf '+lg+'"}.',{images:[b],modelTier:"quick"}).then(function(x){
+  var t=(x&&x.text)||"",j=null;try{j=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}catch(e){}
+  if(!j)return{ok:false,msg:"Die Prüfung hat nicht geklappt. Versuch es später nochmal.",err:true};
+  if(j.echt!==true)return{ok:false,msg:"Foto abgelehnt: "+String(j.grund||"").slice(0,140)+" Mach ein neues Foto direkt mit der Kamera."};
+  return{ok:true}}).catch(function(){return{ok:false,msg:"Die Prüfung hat nicht geklappt. Versuch es später nochmal.",err:true}})})}
+/* Kassenbon */
+function rcDay(n){return dkey(Date.now()-n*864e5)}
+function rcSheet(cb,c,gate){
+ open('<h2>Kassenbon scannen</h2><p class="hint">Zuerst kommt der Kassenbon, danach die Dose. Fotografiere den Bon flach und gut lesbar, mit Datum und der Monster-Zeile. Ohne Bon gibt es keine Punkte.</p><p class="hint" id="rcm"></p><div class="rcb"><label class="btn pri">Kassenbon fotografieren<input type="file" accept="image/*" capture="environment" id="rcf" hidden></label><button class="btn" id="rcn">Ohne Bon eintragen (keine Punkte)</button><button class="btn" id="cl">Abbrechen</button></div>');
+ $("cl").onclick=closeSheet;if(gate)$("rcn").style.display="none";
+ $("rcn").onclick=function(){if(c&&!c.got){c.got=true;c.date=today();if(code0)c.code=c.code||code0;save();render()}closeSheet();open('<h2>OK</h2><p>Dose eingetragen, aber ohne Punkte.</p><button class="btn pri" id="cl">Super</button>');$("cl").onclick=closeSheet;tr(document.getElementById("card"))};
+ $("rcf").onchange=function(){var f=this.files[0];if(!f)return;var m=$("rcm");m.textContent="Bon wird geprüft…";tr(m);if(!fresh(f)){m.textContent=FRESHMSG;tr(m);return}
+  var fail=function(t){m.textContent=t;tr(m)};
+  prep(f,function(b,th){fraud(b,"bon").then(function(fr){if(!fr.ok){fail(fr.msg);return}return getSample()}).then(function(sm){if(sm===undefined)return;if(!sm)return fail("Ohne Prüfung gibt es keine Punkte. Versuch es später nochmal.");
+   return sm('Das Bild soll ein Kassenbon aus einem deutschen Supermarkt sein. Heute ist '+dkey(Date.now())+'. Lies ihn genau. Antworte nur mit JSON: {"bon":true/false,"monster":Anzahl der Positionen Monster Energy oder Energy Drink Dosen (ganze Zahl),"datum":"YYYY-MM-DD","summe":"Gesamtsumme","nr":"Bon- oder Belegnummer oder Uhrzeit"}. bon=false wenn es kein lesbarer Kassenbon ist.',{images:[b],modelTier:"quick"}).then(function(x){
+    var t=(x&&x.text)||"",j=null;try{j=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}catch(e){}
+    if(!j||j.bon!==true)return fail("Das ist kein lesbarer Kassenbon. Fotografiere ihn nochmal.");
+    var n=Math.floor(+j.monster||0);if(n<1)return fail("Auf dem Bon steht kein Monster oder Energy Drink.");
+    var d=String(j.datum||"");if([0,1,2,3].map(rcDay).indexOf(d)<0)return fail("Der Bon ist zu alt. Es zählen nur Bons der letzten 3 Tage.");
+    var key=(d+"|"+String(j.summe||"").replace(/\s/g,"")+"|"+String(j.nr||"").replace(/\s/g,"")).slice(0,80);
+    P.rc=P.rc||{};var r=P.rc[key];if(!r){r=P.rc[key]={m:n,u:0};var ks=Object.keys(P.rc);while(ks.length>40)delete P.rc[ks.shift()]}
+    if(r.u>=r.m)return fail("Dieser Bon ist schon aufgebraucht. Jede Dose auf dem Bon zählt nur einmal.");
+    P.rcCur=key;psave();cb()})}).catch(function(){fail("Ohne Prüfung gibt es keine Punkte. Versuch es später nochmal.")})})}}
+var code0="";
+var _aw3=award;award=function(c,code){code0=code||"";return _aw3(c,code)};
+$("scan").onclick=scanHome;
+/* Sprache */
+var LD=[["Sammlung", "Collection", "Collection"], ["Punkte", "Points", "Points"], ["Preise", "Prices", "Prix"], ["Shop", "Shop", "Boutique"], ["Regal", "Shelf", "Étagère"], ["Liste", "List", "Liste"], ["Rangliste", "Ranking", "Classement"], ["Erfolge", "Achievements", "Succès"], ["Statistik", "Stats", "Stats"], ["Alle", "All", "Tout"], ["Gesammelt", "Collected", "Collectées"], ["Fehlen noch", "Still missing", "Manquantes"], ["Kompakt zeigen", "Compact view", "Vue compacte"], ["Mit Namen zeigen", "Show names", "Afficher les noms"], ["Eigene Sorte", "Custom flavor", "Saveur perso"], ["Sorte suchen", "Search flavor", "Chercher une saveur"], ["Monster suchen", "Search Monster", "Chercher un Monster"], ["Dose scannen", "Scan can", "Scanner une canette"], ["Speichern", "Save", "Enregistrer"], ["Gespeichert", "Saved", "Enregistré"], ["Abbrechen", "Cancel", "Annuler"], ["Schließen", "Close", "Fermer"], ["Fertig", "Done", "Terminé"], ["Super", "Great", "Super"], ["Alles klar", "Got it", "Compris"], ["Hinzufügen", "Add", "Ajouter"], ["Bewerten", "Rate", "Noter"], ["Abholen", "Collect", "Récupérer"], ["Einlösen", "Redeem", "Utiliser"], ["Heute", "Today", "Aujourd'hui"], ["Tage", "days", "jours"], ["Tag", "day", "jour"], ["in Folge", "in a row", "d'affilée"], ["Serie", "streak", "série"], ["Streak-Foto machen", "Take streak photo", "Photo de série"], ["Mach heute ein Foto und starte deine Serie. Tippen.", "Take a photo today and start your streak. Tap.", "Prends une photo aujourd'hui et lance ta série. Appuie."], ["Heute noch kein Streak-Foto! Deine", "No streak photo today yet! Your", "Pas encore de photo aujourd'hui ! Tes"], ["Tage sind in Gefahr. Tippen zum Fotografieren.", "days are at risk. Tap to take a photo.", "jours sont en danger. Appuie pour photographier."], ["Mach jeden Tag ein Foto von deiner Dose, um eine Serie zu starten.", "Take a photo of your can every day to start a streak.", "Prends chaque jour une photo de ta canette pour lancer une série."], ["Mach heute noch ein Foto, sonst ist deine Serie vorbei.", "Take a photo today or your streak is over.", "Prends une photo aujourd'hui, sinon ta série s'arrête."], ["Heutiges Foto ist drin. Komm morgen wieder, damit die Flamme bleibt.", "Today's photo is in. Come back tomorrow to keep the flame.", "La photo du jour est faite. Reviens demain pour garder la flamme."], ["Juwelen", "gems", "gemmes"], ["Deine Juwelen", "Your gems", "Tes gemmes"], ["Juwelen kaufen", "Buy gems", "Acheter des gemmes"], ["Juwelen abholen", "Collect gems", "Récupérer les gemmes"], ["10 Juwelen abholen", "Collect 10 gems", "Récupérer 10 gemmes"], ["10 Juwelen warten auf dich", "10 gems are waiting for you", "10 gemmes t'attendent"], ["10 Juwelen erhalten", "Received 10 gems", "10 gemmes reçues"], ["Belohnung für 100 Punkte", "Reward for 100 points", "Récompense pour 100 points"], ["Belohnung: 1", "Reward: 1", "Récompense : 1"], ["Gutscheine", "vouchers", "bons"], ["Gutschein", "voucher", "bon d'achat"], ["Deine Gutscheine", "Your vouchers", "Tes bons d'achat"], ["Noch keine Gutscheine.", "No vouchers yet.", "Pas encore de bons."], ["Gutschein gekauft", "Voucher bought", "Bon acheté"], ["Gutschein einlösen?", "Redeem voucher?", "Utiliser le bon ?"], ["Ja, einlösen", "Yes, redeem", "Oui, utiliser"], ["eingelöst", "redeemed", "utilisé"], ["für eine Dose deiner Wahl", "for a can of your choice", "pour une canette de ton choix"], ["Für 100 Juwelen kaufen", "Buy for 100 gems", "Acheter pour 100 gemmes"], ["Juwelen bekommst du über Punkte: 100 Punkte = 10 Juwelen.", "You earn gems from points: 100 points = 10 gems.", "Tu gagnes des gemmes avec les points : 100 points = 10 gemmes."], ["100 Juwelen = 1 Gutschein. Pro Tag kannst du einen kaufen, und du kannst höchstens 3 offene Gutscheine haben.", "100 gems = 1 voucher. You can buy one per day and hold at most 3 open vouchers.", "100 gemmes = 1 bon. Tu peux en acheter un par jour et avoir 3 bons ouverts maximum."], ["Dir fehlen noch", "You still need", "Il te manque encore"], ["Heute hast du schon einen gekauft. Morgen geht der nächste.", "You already bought one today. Tomorrow you can buy the next.", "Tu en as déjà acheté un aujourd'hui. Le prochain, demain."], ["Löse erst einen Gutschein ein.", "Redeem a voucher first.", "Utilise d'abord un bon."], ["Nur Vorschau", "Preview only", "Aperçu seulement"], ["Nur Vorschau zum Ansehen. Es gibt hier kein Konto und keine Bezahlung, ein Tipp bucht nichts ab.", "Preview only. There is no account and no payment here, tapping charges nothing.", "Aperçu uniquement. Il n'y a ni compte ni paiement, rien n'est débité."], ["Beliebt", "Popular", "Populaire"], ["Bestwert", "Best value", "Meilleur prix"], ["Super", "Great", "Super"], ["Postleitzahl", "postcode", "code postal"], ["Deine Postleitzahl", "Your postcode", "Ton code postal"], ["Preise und Märkte", "Prices and stores", "Prix et magasins"], ["Märkte in deiner Nähe", "Stores near you", "Magasins près de toi"], ["In Maps öffnen", "Open in Maps", "Ouvrir dans Maps"], ["Angebote", "Offers", "Offres"], ["Letzte Aktivitäten", "Recent activity", "Activité récente"], ["Noch nichts gescannt. Scanne deine erste Dose.", "Nothing scanned yet. Scan your first can.", "Rien de scanné. Scanne ta première canette."], ["Gib oben Postleitzahl oder Ort ein.", "Enter a postcode or town above.", "Saisis un code postal ou une ville ci-dessus."], ["Gib Postleitzahl oder Ort ein. Darunter erscheinen die Märkte für deine Gegend.", "Enter a postcode or town. Stores for your area appear below.", "Saisis un code postal ou une ville. Les magasins de ta région apparaissent dessous."], ["Postleitzahl oder Ort, z. B. 10115", "Postcode or town, e.g. 10115", "Code postal ou ville, ex. 10115"], ["Noch", "Still", "Encore"], ["Punkte bis zu 10 Juwelen", "points until 10 gems", "points avant 10 gemmes"], ["Punkte bis zu den nächsten 10 Juwelen.", "points until the next 10 gems.", "points avant les 10 prochaines gemmes."], ["Noch keine Juwelen frei.", "No gems ready yet.", "Pas encore de gemmes."], ["5 pro gescannter Dose, bei 100 gibt es 10 Juwelen", "5 per scanned can, at 100 you get 10 gems", "5 par canette scannée, à 100 tu reçois 10 gemmes"], ["Consti Monsti schaut hin…", "Consti Monsti is looking…", "Consti Monsti regarde…"], ["Ich prüfe dein Foto.", "I'm checking your photo.", "Je vérifie ta photo."], ["Heute habe ich Lust auf diese drei Sorten. Fotografierst du sie für mich?", "Today I fancy these three flavors. Will you photograph them for me?", "Aujourd'hui j'ai envie de ces trois saveurs. Tu les photographies pour moi ?"], ["Lecker, alle drei Sorten für heute sind geschafft!", "Yum, all three flavors for today are done!", "Miam, les trois saveurs du jour sont faites !"], ["Fotografiere die Sorte", "Photograph the flavor", "Photographie la saveur"], ["Yay! +1 💎 für dich.", "Yay! +1 💎 for you.", "Youpi ! +1 💎 pour toi."], ["Tageslimit erreicht", "Daily limit reached", "Limite du jour atteinte"], ["Pro Tag zählen höchstens 10 gescannte Dosen für Punkte. Morgen geht es weiter.", "At most 10 scanned cans per day earn points. Continue tomorrow.", "Au maximum 10 canettes par jour rapportent des points. À demain."], ["Das ist nicht die gesuchte Sorte oder man erkennt sie nicht gut. Fotografiere die Vorderseite näher.", "That's not the flavor we want, or it isn't clearly visible. Photograph the front closer.", "Ce n'est pas la bonne saveur ou on la voit mal. Photographie l'avant de plus près."], ["Die KI ist gerade nicht erreichbar. Versuch es später nochmal.", "The AI is not reachable right now. Try again later.", "L'IA n'est pas joignable. Réessaie plus tard."], ["Dieses Foto hast du heute schon benutzt. Mach ein neues.", "You already used this photo today. Take a new one.", "Tu as déjà utilisé cette photo aujourd'hui. Prends-en une autre."], ["Die Prüfung hat nicht geklappt. Versuch es später nochmal.", "The check failed. Try again later.", "La vérification a échoué. Réessaie plus tard."], ["Auf dem Foto ist keine Dose zu sehen. Versuch es nochmal.", "No can visible in the photo. Try again.", "Aucune canette sur la photo. Réessaie."], ["Foto wird geprüft…", "Checking photo…", "Vérification de la photo…"], ["Foto wird gelesen…", "Reading photo…", "Lecture de la photo…"], ["Die Dose wird erkannt…", "Recognizing the can…", "Reconnaissance de la canette…"], ["Streak-Foto", "Streak photo", "Photo de série"], ["Dose fotografieren", "Photograph can", "Photographier la canette"], ["Foto vom Barcode", "Photo of barcode", "Photo du code-barres"], ["Foto der Vorderseite", "Photo of the front", "Photo de l'avant"], ["Foto aufnehmen", "Take photo", "Prendre une photo"], ["Schritt 2: Vorderseite", "Step 2: Front", "Étape 2 : avant"], ["Halte den Barcode hinten auf der Dose ins Bild.", "Hold the barcode on the back of the can in view.", "Place le code-barres au dos de la canette dans l'image."], ["Welche Sorte ist es?", "Which flavor is it?", "Quelle saveur est-ce ?"], ["Welche Sorte ist es richtig?", "Which flavor is correct?", "Quelle est la bonne saveur ?"], ["Falsch erkannt?", "Wrong match?", "Mal reconnu ?"], ["Andere Sorte", "Other flavor", "Autre saveur"], ["Sorte wählen", "Choose flavor", "Choisir la saveur"], ["Wähle die richtige Sorte.", "Choose the right flavor.", "Choisis la bonne saveur."], ["Zuordnen und abhaken", "Assign and tick off", "Assigner et cocher"], ["Du hast jetzt", "You now have", "Tu as maintenant"], ["Schon gezählt", "Already counted", "Déjà compté"], ["Schon gesammelt", "Already collected", "Déjà collectée"], ["Neue Dose", "New can", "Nouvelle canette"], ["Neuer Barcode", "New barcode", "Nouveau code-barres"], ["Nächste Dose scannen", "Scan next can", "Scanner la suivante"], ["Erkannt als", "Recognized as", "Reconnu comme"], ["Stimmt das?", "Is that right?", "C'est bien ça ?"], ["Freier Platz", "Free slot", "Emplacement libre"], ["Noch kein Foto", "No photo yet", "Pas encore de photo"], ["Noch nicht gescannt", "Not scanned yet", "Pas encore scannée"], ["Als fehlend markieren", "Mark as missing", "Marquer comme manquante"], ["Als gesammelt markieren", "Mark as collected", "Marquer comme collectée"], ["Auf die Wunschliste", "Add to wishlist", "Ajouter aux envies"], ["Auf der Wunschliste", "On the wishlist", "Dans les envies"], ["Wunschliste", "Wishlist", "Liste d'envies"], ["Deine Favoriten", "Your favorites", "Tes favoris"], ["Wie hat sie geschmeckt?", "How did it taste?", "Quel goût avait-elle ?"], ["Preis bezahlt in € (z. B. 1,19)", "Price paid in € (e.g. 1.19)", "Prix payé en € (ex. 1,19)"], ["Preise trägst du in den Details einer Dose ein.", "Enter prices in a can's details.", "Saisis les prix dans les détails d'une canette."], ["ausgegeben", "spent", "dépensé"], ["Regal voll", "Shelf full", "Étagère remplie"], ["gesammelt", "collected", "collectées"], ["Ø pro Dose", "Avg per can", "Moy. par canette"], ["Sorten gesammelt,", "flavors collected,", "saveurs collectées,"], ["fehlen noch", "still missing", "manquent encore"], ["Keine Treffer. Ändere Suche oder Filter.", "No results. Change your search or filter.", "Aucun résultat. Modifie la recherche ou le filtre."], ["Erste Dose", "First can", "Première canette"], ["Halbzeit", "Halfway", "Mi-parcours"], ["Alle Sorten", "All flavors", "Toutes les saveurs"], ["Sorten", "flavors", "saveurs"], ["10 bewertet", "10 rated", "10 notées"], ["10 Fotos", "10 photos", "10 photos"], ["Fünf-Sterne-Dose", "Five-star can", "Canette 5 étoiles"], ["Durchschnittliche Bewertung:", "Average rating:", "Note moyenne :"], ["Sicherung kopieren", "Copy backup", "Copier la sauvegarde"], ["Sicherung einfügen", "Paste backup", "Coller la sauvegarde"], ["Aus Cloud laden", "Load from cloud", "Charger depuis le cloud"], ["Aus der Cloud laden", "Load from the cloud", "Charger depuis le cloud"], ["Sicherung", "Backup", "Sauvegarde"], ["Automatisch gesichert um", "Automatically saved at", "Sauvegarde auto à"], ["Automatische Sicherung ist an.", "Automatic backup is on.", "La sauvegarde automatique est active."], ["Automatische Sicherung wird geprüft…", "Checking automatic backup…", "Vérification de la sauvegarde automatique…"], ["Kassenbon", "receipt", "ticket de caisse"], ["Kassenbon scannen", "Scan receipt", "Scanner le ticket"], ["Ohne Bon eintragen", "Add without receipt", "Ajouter sans ticket"], ["Gültig ab", "Valid from", "Valable à partir du"], ["Gültig bis", "Valid until", "Valable jusqu'au"], ["Abgelaufen am", "Expired on", "Expiré le"], ["Seit", "Since", "Depuis"], ["mit Pfand,", "with deposit,", "avec consigne,"], ["pro Dose", "per can", "par canette"], ["statt", "instead of", "au lieu de"], ["sonst", "otherwise", "sinon"], ["Code", "Code", "Code"], ["Laden", "Store", "Magasin"], ["Stand", "As of", "État au"], ["Fehler", "Error", "Erreur"], ["Du hast", "You have", "Tu as"], ["Gib", "Enter", "Saisis"], ["Sprache", "Language", "Langue"], ["Zuerst kommt der Kassenbon, danach die Dose. Fotografiere den Bon flach und gut lesbar, mit Datum und der Monster-Zeile. Ohne Bon gibt es keine Punkte.", "First the receipt, then the can. Photograph the receipt flat and readable, with the date and the Monster line. No receipt, no points.", "D'abord le ticket, ensuite la canette. Photographie le ticket à plat et lisible, avec la date et la ligne Monster. Sans ticket, pas de points."], ["Kassenbon fotografieren", "Photograph receipt", "Photographier le ticket"], ["Ohne Bon eintragen (keine Punkte)", "Add without receipt (no points)", "Ajouter sans ticket (pas de points)"], ["Bon wird geprüft…", "Checking receipt…", "Vérification du ticket…"], ["Das ist kein lesbarer Kassenbon. Fotografiere ihn nochmal.", "That is not a readable receipt. Photograph it again.", "Ce n'est pas un ticket lisible. Photographie-le à nouveau."], ["Auf dem Bon steht kein Monster oder Energy Drink.", "No Monster or energy drink on this receipt.", "Aucun Monster ni boisson énergisante sur ce ticket."], ["Der Bon ist zu alt. Es zählen nur Bons der letzten 3 Tage.", "The receipt is too old. Only receipts from the last 3 days count.", "Le ticket est trop ancien. Seuls les tickets des 3 derniers jours comptent."], ["Dieser Bon ist schon aufgebraucht. Jede Dose auf dem Bon zählt nur einmal.", "This receipt is used up. Each can on a receipt counts only once.", "Ce ticket est déjà épuisé. Chaque canette du ticket ne compte qu'une fois."], ["Ohne Prüfung gibt es keine Punkte. Versuch es später nochmal.", "Without verification there are no points. Try again later.", "Sans vérification, pas de points. Réessaie plus tard."], ["Bon geprüft. Punkte werden gutgeschrieben.", "Receipt verified. Points are credited.", "Ticket vérifié. Les points sont crédités."], ["Dose eingetragen, aber ohne Punkte.", "Can added, but without points.", "Canette ajoutée, mais sans points."], ["Als Favorit markieren", "Mark as favorite", "Marquer comme favori"], ["Favorit", "Favorite", "Favori"], ["(mit Kassenbon)", "(with receipt)", "(avec ticket)"], ["Das Foto ist nicht frisch aufgenommen. Mach es jetzt direkt mit der Kamera.", "The photo was not taken just now. Take it directly with the camera.", "La photo n'a pas été prise à l'instant. Prends-la directement avec l'appareil photo."], ["Foto abgelehnt:", "Photo rejected:", "Photo refusée :"], ["Mach ein neues Foto direkt mit der Kamera.", "Take a new photo directly with the camera.", "Prends une nouvelle photo directement avec l'appareil photo."], ["Monatsrangliste", "Monthly ranking", "Classement du mois"], ["Rangliste lädt…", "Loading ranking…", "Chargement du classement…"], ["Noch keine Punkte diesen Monat.", "No points this month yet.", "Pas encore de points ce mois-ci."], ["Dein Spitzname", "Your nickname", "Ton pseudo"], ["Preise gibt es erst ab 3 Spielern, damit niemand allein gewinnt.", "Prizes are only awarded with 3 or more players so nobody wins alone.", "Les prix ne sont attribués qu'à partir de 3 joueurs, pour que personne ne gagne seul."], ["Die Rangliste braucht die Cloud und ist hier nicht verfügbar.", "The ranking needs the cloud and is not available here.", "Le classement nécessite le cloud et n'est pas disponible ici."], ["Du", "You", "Toi"], ["Willkommen im Dosen-Dex!", "Welcome to the Dosen-Dex!", "Bienvenue dans le Dosen-Dex !"], ["Wähle deinen Spitznamen. Er steht in der Rangliste und im Profil. Rassistische, beleidigende oder unpassende Namen werden von der KI abgelehnt.", "Choose your nickname. It appears in the ranking and your profile. Racist, offensive or inappropriate names are rejected by the AI.", "Choisis ton pseudo. Il apparaît dans le classement et ton profil. Les pseudos racistes, insultants ou inappropriés sont refusés par l'IA."], ["Weiter", "Continue", "Continuer"], ["Name speichern", "Save name", "Enregistrer le nom"], ["Name wird geprüft…", "Checking name…", "Vérification du nom…"], ["Name geprüft", "Name verified", "Nom vérifié"], ["Name noch nicht geprüft", "Name not verified yet", "Nom pas encore vérifié"], ["Quests geschafft", "Quests done", "Quêtes réussies"], ["Gutscheine gekauft", "Vouchers bought", "Bons achetés"], ["Rang diesen Monat", "Rank this month", "Rang ce mois-ci"], ["Platzierungen", "Podium finishes", "Podiums"], ["Sorten gesammelt", "Flavors collected", "Saveurs collectées"], ["Tage Serie", "Streak days", "Jours de série"], ["Profil ändern", "Edit profile", "Modifier le profil"], ["Name abgelehnt:", "Name rejected:", "Nom refusé :"], ["Dieser Name ist nicht erlaubt. Wähle einen freundlichen Namen.", "This name is not allowed. Choose a friendly name.", "Ce nom n'est pas autorisé. Choisis un nom sympa."], ["Der Name braucht 2 bis 20 Zeichen.", "The name needs 2 to 20 characters.", "Le nom doit avoir 2 à 20 caractères."], ["Links und Kontaktdaten sind im Namen nicht erlaubt.", "Links and contact details are not allowed in the name.", "Les liens et coordonnées sont interdits dans le nom."], ["Deine Bewertungen", "Your ratings", "Tes notes"], ["Deinen Spitznamen änderst du im Profil unten rechts.", "You can change your nickname in the profile at the bottom right.", "Tu peux changer ton pseudo dans le profil en bas à droite."], ["Erfolge", "Achievements", "Succès"], ["Dieser Name ist schon vergeben. Wähle einen anderen.", "This name is already taken. Choose another one.", "Ce nom est déjà pris. Choisis-en un autre."], ["Der Name braucht Buchstaben oder Zahlen.", "The name needs letters or numbers.", "Le nom doit contenir des lettres ou des chiffres."], ["Profil bearbeiten", "Edit profile", "Modifier le profil"], ["Profilbild", "Profile picture", "Photo de profil"], ["Foto", "Photo", "Photo"], ["Galerie", "Gallery", "Galerie"], ["Entfernen", "Remove", "Supprimer"], ["Name", "Name", "Nom"], ["Bild wird geprüft…", "Checking picture…", "Vérification de l'image…"], ["Bild abgelehnt:", "Picture rejected:", "Image refusée :"], ["Das Bild konnte nicht gelesen werden.", "The picture could not be read.", "L'image n'a pas pu être lue."], ["Blauen Haken beantragen", "Request blue check", "Demander le badge bleu"], ["✔ Blauen Haken beantragen", "✔ Request blue check", "✔ Demander le badge bleu"], ["Blauer Haken", "Blue check", "Badge bleu"], ["Du bist verifiziert.", "You are verified.", "Tu es vérifié."], ["Antrag senden", "Send request", "Envoyer la demande"], ["Antrag gesendet. Der Betreiber prüft ihn.", "Request sent. The operator will review it.", "Demande envoyée. L'exploitant va l'examiner."], ["Anträge prüfen", "Review requests", "Examiner les demandes"], ["Blauen Haken geben", "Give blue check", "Donner le badge bleu"], ["Ablehnen", "Reject", "Refuser"], ["Keine offenen Anträge.", "No open requests.", "Aucune demande en attente."], ["Screenshot wird gelesen…", "Reading screenshot…", "Lecture de la capture…"], ["Gib zuerst deinen Namen ein.", "Enter your name first.", "Saisis d'abord ton nom."], ["Du brauchst ein TikTok- und ein Instagram-Profil mit je mindestens 10.000 Followern. Gib deine Namen ein und lade je einen Screenshot deines Profils hoch, auf dem Name und Follower zu sehen sind. Die KI liest ihn, danach prüft der Betreiber deinen Antrag.", "You need a TikTok and an Instagram profile with at least 10,000 followers each. Enter your names and upload a screenshot of each profile showing name and followers. The AI reads it, then the operator reviews your request.", "Il te faut un profil TikTok et un profil Instagram avec au moins 10 000 abonnés chacun. Saisis tes noms et envoie une capture de chaque profil montrant le nom et les abonnés. L'IA la lit, puis l'exploitant examine ta demande."], ["Wie alt bist du?", "How old are you?", "Quel âge as-tu ?"], ["Leider zu jung", "Sorry, too young", "Désolé, trop jeune"], ["Der Dosen-Dex ist erst ab 12 Jahren. Bitte komm wieder, wenn du alt genug bist.", "The Dosen-Dex is for ages 12 and up. Please come back when you are old enough.", "Le Dosen-Dex est réservé aux 12 ans et plus. Reviens quand tu auras l'âge."], ["Der Dosen-Dex ist ab 12 Jahren. Gib dein Geburtsdatum ein. Es ist nur für dich sichtbar, wird nur zur Alterskontrolle und für dein Geburtstagsgeschenk genutzt und kann später nicht geändert werden. Am Geburtstag gibt es 5 💎.", "The Dosen-Dex is for ages 12 and up. Enter your date of birth. It is only visible to you, is only used for the age check and your birthday gift, and cannot be changed later. On your birthday you get 5 💎.", "Le Dosen-Dex est réservé aux 12 ans et plus. Saisis ta date de naissance. Elle n'est visible que par toi, sert uniquement au contrôle d'âge et au cadeau d'anniversaire, et ne peut plus être modifiée. À ton anniversaire, tu reçois 5 💎."], ["Bitte gib ein gültiges Geburtsdatum ein.", "Please enter a valid date of birth.", "Saisis une date de naissance valide."], ["🎂 Alles Gute!", "🎂 Happy birthday!", "🎂 Joyeux anniversaire !"], ["Danke", "Thanks", "Merci"], ["Geburtstagsgeschenk", "Birthday gift", "Cadeau d'anniversaire"], ["Bio speichern", "Save bio", "Enregistrer la bio"], ["Bio", "Bio", "Bio"], ["Schreib etwas über dich (max. 20 Wörter)", "Write something about yourself (max. 20 words)", "Écris quelque chose sur toi (20 mots max.)"], ["Wörter", "words", "mots"], ["Bio wird geprüft…", "Checking bio…", "Vérification de la bio…"], ["Bio abgelehnt:", "Bio rejected:", "Bio refusée :"], ["Die Bio darf höchstens 20 Wörter haben.", "The bio may have at most 20 words.", "La bio ne peut pas dépasser 20 mots."], ["Die Bio ist zu lang.", "The bio is too long.", "La bio est trop longue."], ["Links und Kontaktdaten sind in der Bio nicht erlaubt.", "Links and contact details are not allowed in the bio.", "Les liens et coordonnées sont interdits dans la bio."], ["Diese Bio ist nicht erlaubt. Schreib etwas Freundliches.", "This bio is not allowed. Write something friendly.", "Cette bio n'est pas autorisée. Écris quelque chose de sympa."], ["Punkte diesen Monat", "Points this month", "Points ce mois-ci"]],LANG="de";
+try{LANG=localStorage.getItem("dd_lang")||"de"}catch(e){}
+var LR=null,LS=new WeakMap();
+function lbuild(){var ix=LANG=="en"?1:2;LR=LD.map(function(r){return[new RegExp("(^|[^A-Za-zÄÖÜäöüß])"+r[0].replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"(?![A-Za-zÄÖÜäöüß])","g"),r[ix]]}).sort(function(a,b){return b[0].source.length-a[0].source.length})}
+function ltr(t){if(LANG=="de")return t;if(!LR)lbuild();for(var i=0;i<LR.length;i++){LR[i][0].lastIndex=0;t=t.replace(LR[i][0],function(m,p){return p+LR[i][1]})}return t}
+function trNode(n){var v=n.nodeValue;if(!v||!v.trim())return;var rec=LS.get(n);var o=(rec&&rec.t===v)?rec.o:v;var t=ltr(o);if(t!==v){LS.set(n,{o:o,t:t});n.nodeValue=t}else LS.set(n,{o:o,t:t})}
+var LAT=["placeholder","aria-label","title"],LA=new WeakMap();
+function trEl(e){LAT.forEach(function(a){var v=e.getAttribute&&e.getAttribute(a);if(!v)return;var m=LA.get(e)||{};var rec=m[a];var o=(rec&&rec.t===v)?rec.o:v;var t=ltr(o);m[a]={o:o,t:t};LA.set(e,m);if(t!==v)e.setAttribute(a,t)})}
+var lbusy=false;
+function tr(root){if(lbusy||!root)return;lbusy=true;try{var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(n){var p=n.parentNode&&n.parentNode.nodeName;return p=="SCRIPT"||p=="STYLE"||p=="TEXTAREA"?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}});var n;while(n=w.nextNode())trNode(n);if(root.nodeType==1){trEl(root);[].forEach.call(root.querySelectorAll("[placeholder],[aria-label],[title]"),trEl)}}catch(e){}lbusy=false}
+var lt=0;new MutationObserver(function(){if(LANG=="de")return;clearTimeout(lt);lt=setTimeout(function(){tr(document.body)},30)}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["placeholder","aria-label","title"]});
+function setLang(l){LANG=l;LR=null;try{localStorage.setItem("dd_lang",l)}catch(e){}document.documentElement.lang=l;
+ if(l=="de"){render();prl();roffers&&roffers()}else{tr(document.body)}}
+(function(){var b=document.createElement("button");b.id="acb";b.setAttribute("aria-label","Profil");b.textContent="👤";b.style.cssText="position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);z-index:30;width:42px;height:42px;font-size:20px;border-radius:50%;border:2px solid var(--ac);background:rgba(20,22,18,.92);color:#fff;box-shadow:0 0 10px var(--ac);padding:0";b.onclick=profSheet;document.body.appendChild(b);if(LANG!="de")setTimeout(function(){tr(document.body)},50)})();
+
+/* Monatsrangliste */
+var LB=null,lbT=0;
+function mkey(d){return dkey(d||Date.now()).slice(0,7)}
+function pmkey(){var x=new Date();x.setDate(1);x.setMonth(x.getMonth()-1);return dkey(x.getTime()).slice(0,7)}
+function mpTrack(){if(P.lp==null||isNaN(P.lp)){P.lp=P.pts;return}var d=P.pts-P.lp;if(!d)return;P.mpm=P.mpm||{};var k=mkey();P.mpm[k]=Math.max(0,(P.mpm[k]||0)+d);var ks=Object.keys(P.mpm).sort();while(ks.length>4)delete P.mpm[ks.shift()];P.lp=P.pts;psave();lbPush()}
+function lbPush(){if(!DB||!UID)return;clearTimeout(lbT);lbT=setTimeout(function(){if(!P.mpm||!Object.keys(P.mpm).length)return;DB.doc("board/"+UID).set({name:(P.nickV?String(P.nick||"Spieler"):"Spieler").slice(0,20),av:(P.avV&&P.av)?P.av:"",bio:(P.bioV&&P.bio)?P.bio:"",months:P.mpm,t:Date.now()}).then(lbLoad).catch(function(){})},3000)}
+function lbLoad(){if(!DB)return;DB.collection("verified").get().then(function(sn){VER={};sn.docs.forEach(function(d){VER[d.id]=1});lbPaint()}).catch(function(){});DB.collection("board").get().then(function(sn){LB=sn.docs.map(function(d){var x=d.data()||{};return{id:d.id,name:String(x.name||"Spieler").slice(0,20),av:(typeof x.av=="string"&&/^data:image\/jpeg/.test(x.av)&&x.av.length<30000)?x.av:"",bio:typeof x.bio=="string"?x.bio.slice(0,200):"",months:x.months&&typeof x.months=="object"?x.months:{}}});lbReward();lbPaint()}).catch(function(){})}
+function lbRank(m){return(LB||[]).filter(function(x){return x.months[m]>0}).sort(function(a,b){return b.months[m]-a.months[m]||String(a.id).localeCompare(String(b.id))})}
+function lbReward(){var pm=pmkey();P.lbc=P.lbc||{};if(P.lbc[pm]!==undefined||!LB||!UID)return;var r=lbRank(pm),ix=r.map(function(x){return x.id}).indexOf(UID);
+ if(r.length>=3&&ix>=0&&ix<3){var g=[10,5,3][ix];P.lbc[pm]=ix+1;P.gems=(P.gems||0)+g;P.hist=P.hist||[];P.hist.unshift({n:"Rangliste Platz "+(ix+1),t:Date.now(),p:0});psave();prender();open('<h2>🏆 Platz '+(ix+1)+'!</h2><p>Du warst letzten Monat auf Platz '+(ix+1)+' der Rangliste. Dafür gibt es '+g+' 💎.</p><button class="btn pri" id="cl">Super</button>');$("cl").onclick=closeSheet}else{P.lbc[pm]=0;psave()}}
+function lbInner(){var k=mkey(),mn=new Date().toLocaleString("de-DE",{month:"long"}),end=new Date();end=new Date(end.getFullYear(),end.getMonth()+1,0).getDate()-new Date().getDate();
+ var h='<b>🏆 Monatsrangliste '+mn+'</b><div class="hint">Noch '+end+' Tage. 🥇 10 💎  🥈 5 💎  🥉 3 💎</div>';
+ if(!DB)h+='<p class="hint">Die Rangliste braucht die Cloud und ist hier nicht verfügbar.</p>';
+ else if(!LB)h+='<p class="hint">Rangliste lädt…</p>';
+ else{var r=lbRank(k);if(!r.length)h+='<p class="hint">Noch keine Punkte diesen Monat.</p>';
+  r.slice(0,10).forEach(function(x,i){h+='<div class="lbr'+(x.id==UID?' me':'')+'" data-u="'+esc(x.id)+'"><span>'+(["🥇","🥈","🥉"][i]||(i+1)+".")+'</span>'+avHtml(x.id==UID?P.av:x.av,x.id==UID?(P.nick||"Du"):x.name,28)+'<span class="lbn">'+esc(x.id==UID?(P.nick||"Du"):x.name)+vbF(x.id)+'</span><b>'+x.months[k]+'</b></div>'});
+  var me=r.map(function(x){return x.id}).indexOf(UID);if(me>9)h+='<div class="lbr me"><span>'+(me+1)+'.</span><span class="lbn">'+esc(P.nick||"Du")+'</span><b>'+r[me].months[k]+'</b></div>';
+  if(r.length<3)h+='<p class="hint">Preise gibt es erst ab 3 Spielern, damit niemand allein gewinnt.</p>'}
+ h+='<p class="hint">Deinen Spitznamen änderst du im Profil unten rechts.</p>';return h}
+function lbBox(){return'<div class="pr" id="lb">'+lbInner()+'</div>'}
+function lbPaint(){var e=$("lb");if(e){e.innerHTML=lbInner()}}
+var _pr1=prender;prender=function(){mpTrack();_pr1();accUpd()};
+
+
+/* Namen vergeben + Profilbild */
+function nkey(n){return String(n).toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/[^a-z0-9]/g,"").slice(0,30)}
+function claimName(n){var k=nkey(n);if(!k)return Promise.resolve({ok:false,msg:"Der Name braucht Buchstaben oder Zahlen."});if(!DB||!UID)return Promise.resolve({ok:true,off:true});
+ var ref=DB.doc("names/"+k);return ref.get().then(function(sn){var d=sn.exists&&sn.data();if(d&&d.uid&&d.uid!==UID)return{ok:false,msg:"Dieser Name ist schon vergeben. Wähle einen anderen."};
+  return ref.set({uid:UID,name:n,t:Date.now()}).then(function(){var ok0=nkey(P.nick||"");if(ok0&&ok0!==k){DB.doc("names/"+ok0).get().then(function(o){if(o.exists&&o.data().uid===UID)DB.doc("names/"+ok0).delete().catch(function(){})}).catch(function(){})}P.nickC=true;return{ok:true}})}).catch(function(){return{ok:true,off:true}})}
+function claimOwn(){if(P.nick&&!P.nickC&&DB){claimName(P.nick).then(function(r){if(r.ok&&!r.off){psave()}else if(!r.ok){P.nick="";P.nickV=false;psave();firstRun()}})}}
+function avHtml(src,name,sz){var st='width:'+sz+'px;height:'+sz+'px;font-size:'+Math.round(sz*.45)+'px';return src?'<img class="avi" style="'+st+'" src="'+src+'" alt="">':'<span class="avi av0" style="'+st+'">'+esc(String(name||"?").charAt(0).toUpperCase())+'</span>'}
+function accUpd(){var b=$("acb");if(!b)return;b.innerHTML=P.av?'<img class="avi" style="width:38px;height:38px" src="'+P.av+'" alt="">':'👤'}
+function cropAv(f,cb){var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var c=document.createElement("canvas");c.width=c.height=128;var m=Math.min(im.width,im.height),x=(im.width-m)/2,y=(im.height-m)/2;c.getContext("2d").drawImage(im,x,y,m,m,0,0,128,128);URL.revokeObjectURL(u);c.toBlob(function(b){cb(b,c.toDataURL("image/jpeg",.78))},"image/jpeg",.85)};im.onerror=function(){cb(null,"")};im.src=u}
+document.addEventListener("change",function(e){var el=e.target;if(!el||!el.classList||!el.classList.contains("pav")||!el.files||!el.files[0])return;var f=el.files[0];el.value="";var m=$("avm");m.textContent="Bild wird geprüft…";tr(m);
+ cropAv(f,function(b,d){if(!b)return m.textContent="Das Bild konnte nicht gelesen werden.";
+  getSample().then(function(sm){var lg=LANG=="en"?"Englisch":LANG=="fr"?"Französisch":"Deutsch";
+   if(!sm){P.av=d;P.avV=false;psave();accUpd();profSheet();return}
+   return sm('Prüfe dieses Profilbild für eine öffentliche App. Lehne ab (ok=false) bei: Nacktheit oder sexuellen Inhalten, Gewalt oder Blut, Hass- oder extremistischen Symbolen, Beleidigungen als Text, Drogen oder Waffen. Normale Fotos, Tiere, Dosen, Figuren und Landschaften sind erlaubt. Antworte nur mit JSON: {"ok":true/false,"grund":"ein kurzer Satz auf '+lg+'"}.',{images:[b],modelTier:"quick"}).then(function(x){var t=(x&&x.text)||"",j=null;try{j=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}catch(er){}
+    if(!j||j.ok!==true){m.textContent="Bild abgelehnt: "+String((j&&j.grund)||"Das Bild passt nicht.").slice(0,120);tr(m);return}
+    P.av=d;P.avV=true;psave();lbPush();if(DB)cloudPush();accUpd();profSheet()})}).catch(function(){m.textContent="Die Prüfung hat nicht geklappt. Versuch es später nochmal.";tr(m)})})});
+
+/* Blauer Haken */
+var VER={},ISOWNER=false;
+function vb(){return'<svg class="vb" viewBox="0 0 24 24" aria-label="Verifiziert"><path d="M12 1.5l2.9 2 3.5-.4 1.4 3.3 3.2 1.6-.9 3.5.9 3.5-3.2 1.6-1.4 3.3-3.5-.4-2.9 2-2.9-2-3.5.4-1.4-3.3L1.1 15l.9-3.5L1.1 8l3.2-1.6 1.4-3.3 3.5.4z" fill="#20a0ff"/><path d="M7.5 12.3l3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+function vbF(id){return VER[id]?vb():""}
+var VS={};
+function pnum(x){if(typeof x=="number")return x;var t=String(x||"").toLowerCase().replace(/\s/g,"").replace(",",".");var m=t.match(/([0-9.]+)(k|m|tsd|mio)?/);if(!m)return 0;var n=parseFloat(m[1])||0;if(m[2]=="k"||m[2]=="tsd")n*=1e3;if(m[2]=="m"||m[2]=="mio")n*=1e6;return Math.round(n)}
+function vSheet(){VS={};open('<h2>Blauen Haken beantragen</h2><p class="hint">Du brauchst ein TikTok- und ein Instagram-Profil mit je mindestens 10.000 Followern. Gib deine Namen ein und lade je einen Screenshot deines Profils hoch, auf dem Name und Follower zu sehen sind. Die KI liest ihn, danach prüft der Betreiber deinen Antrag.</p>'+
+ '<b>TikTok</b><input type="text" id="vtt" maxlength="30" placeholder="@dein_tiktok"><label class="btn">Screenshot TikTok<input type="file" accept="image/*" class="vf" data-p="tt" hidden></label><p class="hint" id="vm-tt"></p>'+
+ '<b>Instagram</b><input type="text" id="vig" maxlength="30" placeholder="@dein_instagram"><label class="btn">Screenshot Instagram<input type="file" accept="image/*" class="vf" data-p="ig" hidden></label><p class="hint" id="vm-ig"></p>'+
+ '<div class="rcb"><button class="btn pri" id="vsend" disabled>Antrag senden</button><button class="btn" id="cl">Abbrechen</button></div><p class="hint" id="vmm"></p>');
+ $("cl").onclick=closeSheet;
+ $("vsend").onclick=function(){if(!DB||!UID){$("vmm").textContent="Dafür brauchst du die Cloud. Sie ist hier nicht verfügbar.";tr($("vmm"));return}
+  DB.doc("verify/"+UID).set({name:String(P.nick||"").slice(0,20),tt:{h:VS.tt.name,f:VS.tt.f,th:VS.tt.th},ig:{h:VS.ig.name,f:VS.ig.f,th:VS.ig.th},t:Date.now()}).then(function(){P.vq=Date.now();psave();$("vmm").textContent="Antrag gesendet. Der Betreiber prüft ihn.";tr($("vmm"));$("vsend").disabled=true}).catch(function(){$("vmm").textContent="Das Senden hat nicht geklappt. Versuch es später nochmal.";tr($("vmm"))})};
+ tr($("card"))}
+function vCheck(){var ok=VS.tt&&VS.tt.ok&&VS.ig&&VS.ig.ok;var b=$("vsend");if(b)b.disabled=!ok}
+document.addEventListener("change",function(e){var el=e.target;if(!el||!el.classList||!el.classList.contains("vf")||!el.files||!el.files[0])return;var f=el.files[0],pl=el.dataset.p;el.value="";var m=$("vm-"+pl);VS[pl]={ok:false};vCheck();m.textContent="Screenshot wird gelesen…";tr(m);
+ var typed=String($(pl=="tt"?"vtt":"vig").value||"").replace(/^@/,"").trim().toLowerCase();
+ if(!typed){m.textContent="Gib zuerst deinen Namen ein.";tr(m);return}
+ prep(f,function(b,th){fraud(b,"prof").then(function(fr){if(!fr.ok){m.textContent=fr.msg;tr(m);return null}return getSample()}).then(function(sm){if(sm===null)return;if(!sm){m.textContent="Die KI ist gerade nicht erreichbar. Versuch es später nochmal.";tr(m);return}
+  return sm('Das ist ein Screenshot eines '+(pl=="tt"?"TikTok":"Instagram")+'-Profils. Lies den Benutzernamen und die Zahl der Follower (nicht "Gefolgt"). Antworte nur mit JSON: {"plattform":"tiktok" oder "instagram" oder "andere","name":"Benutzername ohne @","follower":Zahl, 12,5K = 12500}.',{images:[b],modelTier:"quick"}).then(function(x){var t=(x&&x.text)||"",j=null;try{j=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}catch(er){}
+   if(!j){m.textContent="Das konnte ich nicht lesen. Mach einen klareren Screenshot.";tr(m);return}
+   var pf=String(j.plattform||"").toLowerCase(),nm=String(j.name||"").replace(/^@/,"").trim().toLowerCase(),fo=pnum(j.follower);
+   if(pf!=(pl=="tt"?"tiktok":"instagram")){m.textContent="Das ist kein Screenshot von "+(pl=="tt"?"TikTok":"Instagram")+".";tr(m);return}
+   if(!nm||(nm!=typed&&nm.indexOf(typed)<0&&typed.indexOf(nm)<0)){m.textContent="Der Name im Screenshot passt nicht zu deiner Eingabe.";tr(m);return}
+   if(fo<10000){m.textContent="Im Screenshot stehen nur "+fo+" Follower. Du brauchst mindestens 10.000.";tr(m);return}
+   VS[pl]={ok:true,name:nm,f:fo,th:th};m.textContent="✓ "+nm+": "+fo+" Follower erkannt.";tr(m);vCheck()})}).catch(function(){m.textContent="Die Prüfung hat nicht geklappt. Versuch es später nochmal.";tr(m)})})});
+function ownerSheet(){open('<h2>Anträge prüfen</h2><div id="ovl"><p class="hint">Lädt…</p></div><button class="btn" id="cl">Schließen</button>');$("cl").onclick=closeSheet;
+ if(!DB)return;DB.collection("verify").get().then(function(sn){var h="",n=0;sn.docs.forEach(function(d){var x=d.data()||{};if(VER[d.id])return;n++;h+='<div class="pr"><b>'+esc(String(x.name||"?").slice(0,20))+'</b><div class="hint">TikTok @'+esc(String((x.tt&&x.tt.h)||"?").slice(0,30))+', '+(+(x.tt&&x.tt.f)||0)+' Follower<br>Instagram @'+esc(String((x.ig&&x.ig.h)||"?").slice(0,30))+', '+(+(x.ig&&x.ig.f)||0)+' Follower</div><div class="vth">'+(x.tt&&/^data:image\//.test(x.tt.th||"")?'<img src="'+x.tt.th+'" alt="">':"")+(x.ig&&/^data:image\//.test(x.ig.th||"")?'<img src="'+x.ig.th+'" alt="">':"")+'</div><div class="rcb" style="flex-direction:row"><button class="btn pri vok" data-i="'+esc(d.id)+'" data-n="'+esc(String(x.name||"").slice(0,20))+'">Blauen Haken geben</button><button class="btn vno" data-i="'+esc(d.id)+'">Ablehnen</button></div></div>'});
+  $("ovl").innerHTML=n?h:'<p class="hint">Keine offenen Anträge.</p>';
+  [].forEach.call(document.querySelectorAll("#ovl .vok"),function(b){b.onclick=function(){var id=this.dataset.i;DB.doc("verified/"+id).set({name:this.dataset.n,t:Date.now()}).then(function(){VER[id]=1;ownerSheet();lbPaint()}).catch(function(){})}});
+  [].forEach.call(document.querySelectorAll("#ovl .vno"),function(b){b.onclick=function(){DB.doc("verify/"+this.dataset.i).delete().then(ownerSheet).catch(function(){})}});tr($("card"))}).catch(function(){$("ovl").innerHTML='<p class="hint">Laden hat nicht geklappt.</p>'})}
+
+/* Bio */
+function wc(t){t=String(t||"").trim();return t?t.split(/\s+/).length:0}
+function modBio(t){t=String(t||"").replace(/[<>"]/g,"").replace(/\s+/g," ").trim();
+ if(!t)return Promise.resolve({ok:true,t:"",v:true});
+ if(wc(t)>20)return Promise.resolve({ok:false,msg:"Die Bio darf höchstens 20 Wörter haben."});
+ if(t.length>200)return Promise.resolve({ok:false,msg:"Die Bio ist zu lang."});
+ if(/https?:|www\.|@|\.[a-z]{2,}\b/i.test(t))return Promise.resolve({ok:false,msg:"Links und Kontaktdaten sind in der Bio nicht erlaubt."});
+ if(!t.split(" ").every(nameLocal))return Promise.resolve({ok:false,msg:"Diese Bio ist nicht erlaubt. Schreib etwas Freundliches."});
+ return getSample().then(function(sm){if(!sm)return{ok:true,t:t,v:false};var lg=LANG=="en"?"Englisch":LANG=="fr"?"Französisch":"Deutsch";
+  return sm('Du prüfst eine Profil-Bio für eine öffentliche App, die ab 12 Jahren ist. Bio: "'+t+'". Lehne ab (ok=false), wenn sie rassistisch, fremdenfeindlich, diskriminierend, hasserfüllt, rechtsextrem (auch verschlüsselt, mit Zahlencodes oder Leetspeak), sexuell, beleidigend, gewalttätig, mobbend ist, zu Drogen oder Alkohol auffordert, eine Person oder Marke vortäuscht oder Kontaktdaten und Links enthält. Normale, freundliche Texte über Hobbys, Lieblingssorten und sich selbst sind erlaubt. Antworte nur mit JSON: {"ok":true/false,"grund":"ein kurzer Satz auf '+lg+'"}.',{modelTier:"quick"}).then(function(x){var r=(x&&x.text)||"",j=null;try{j=JSON.parse(r.slice(r.indexOf("{"),r.lastIndexOf("}")+1))}catch(e){}
+   if(!j)return{ok:true,t:t,v:false};if(j.ok!==true)return{ok:false,msg:"Bio abgelehnt: "+String(j.grund||"").slice(0,120)};return{ok:true,t:t,v:true}}).catch(function(){return{ok:true,t:t,v:false}})})}
+document.addEventListener("input",function(e){if(e.target&&e.target.id=="bio"){var c=$("bioc");if(c){var n=wc(e.target.value);c.textContent=n+" / 20 Wörter";c.style.color=n>20?"#ff6a5a":""}}});
+document.addEventListener("click",function(e){var b=e.target&&e.target.id=="biok"?e.target:null;if(!b)return;var m=$("bm2");if(wc($("bio").value)>20){m.textContent="Die Bio darf höchstens 20 Wörter haben.";tr(m);return}
+ m.textContent="Bio wird geprüft…";tr(m);b.disabled=true;modBio($("bio").value).then(function(r){b.disabled=false;if(!r.ok){m.textContent=r.msg;tr(m);return}P.bio=r.t;P.bioV=!!r.v;psave();lbPush();if(DB)cloudPush();profSheet()})});
+function miniProf(id){var x=(LB||[]).filter(function(y){return y.id==id})[0];if(!x)return;var me=id==UID,nm=me?(P.nick||"Du"):x.name,av=me?P.av:x.av,bio=me?(P.bioV?P.bio:""):x.bio,k=mkey(),pts=x.months[k]||0,rk=lbRank(k).map(function(y){return y.id}).indexOf(id)+1;
+ open('<div class="tk0">'+avHtml(av,nm,88)+'<b class="pfn">@'+esc(nm)+vbF(id)+'</b>'+(bio?'<p class="bio">'+esc(bio)+'</p>':'')+'<div class="tkr"><div><b>'+(rk||"–")+'</b><small>Rang diesen Monat</small></div><div><b>'+pts+'</b><small>Punkte diesen Monat</small></div></div></div><button class="btn" id="cl">Schließen</button>');$("cl").onclick=closeSheet;tr($("card"))}
+document.addEventListener("click",function(e){var r=e.target&&e.target.closest?e.target.closest(".lbr[data-u]"):null;if(r)miniProf(r.dataset.u)});
+/* Profil und Spitzname */
+var LOCK=false,_cs=closeSheet;closeSheet=function(){if(LOCK)return;_cs()};
+var BADW=["nazi","hitler","neger","nigg","kanak","fotze","hurensohn","schwuchtel","kike","faggot","gaskammer","sieghei","auslanderraus","judensau","untermensch","vergewalt"];
+function nameLocal(n){var t=n.toLowerCase().replace(/[0@]/g,"o").replace(/[1!|]/g,"i").replace(/3/g,"e").replace(/[4]/g,"a").replace(/[5$]/g,"s").replace(/[^a-zäöüß]/g,"");if(/(^|[^a-z0-9])88($|[^a-z0-9])/i.test(n)||/1488/.test(n))return false;for(var i=0;i<BADW.length;i++)if(t.indexOf(BADW[i])>-1)return false;return true}
+function modName(n){n=String(n||"").replace(/[<>"]/g,"").trim();
+ if(n.length<2||n.length>20)return Promise.resolve({ok:false,msg:"Der Name braucht 2 bis 20 Zeichen."});
+ if(/https?:|www\.|@|\.[a-z]{2,}\b/i.test(n))return Promise.resolve({ok:false,msg:"Links und Kontaktdaten sind im Namen nicht erlaubt."});
+ if(!nameLocal(n))return Promise.resolve({ok:false,msg:"Dieser Name ist nicht erlaubt. Wähle einen freundlichen Namen."});
+ return getSample().then(function(sm){if(!sm)return{ok:true,v:false};var lg=LANG=="en"?"Englisch":LANG=="fr"?"Französisch":"Deutsch";
+  return sm('Du prüfst Spitznamen für eine öffentliche Rangliste. Name: "'+n+'". Lehne ab (ok=false), wenn der Name rassistisch, fremdenfeindlich, diskriminierend, hasserfüllt, rechtsextrem (auch verschlüsselt oder mit Zahlencodes wie 88 oder 1488, Leetspeak, Lücken oder Schreibweisen, die ähnlich klingen), sexuell, beleidigend, gewalttätig ist, eine Person oder Marke vortäuscht (z.B. Admin, Support, Monster Energy) oder Kontaktdaten enthält. Erlaubt sind normale Vornamen, Fantasienamen und Spitznamen. Antworte nur mit JSON: {"ok":true/false,"grund":"ein kurzer Satz auf '+lg+'"}.',{modelTier:"quick"}).then(function(x){var t=(x&&x.text)||"",j=null;try{j=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}catch(e){}
+   if(!j)return{ok:true,v:false};if(j.ok!==true)return{ok:false,msg:"Name abgelehnt: "+String(j.grund||"").slice(0,120)};return{ok:true,v:true}}).catch(function(){return{ok:true,v:false}})})}
+function saveName(n,v){P.nick=n;P.nickV=!!v;psave();lbPush();if(DB)cloudPush()}
+function nameForm(first){return'<input type="text" id="nn" maxlength="20" placeholder="Dein Spitzname" value="'+esc(first?"":(P.nick||""))+'"><p class="hint" id="nm2"></p><div class="rcb"><button class="btn pri" id="nok">'+(first?"Weiter":"Name speichern")+'</button></div>'}
+function wireName(first,done){var go=function(){var n=$("nn").value,m=$("nm2");m.textContent="Name wird geprüft…";tr(m);$("nok").disabled=true;modName(n).then(function(r){if(!r.ok){$("nok").disabled=false;m.textContent=r.msg;tr(m);return}var nn=n.replace(/[<>"]/g,"").trim();claimName(nn).then(function(c){$("nok").disabled=false;if(!c.ok){m.textContent=c.msg;tr(m);return}saveName(nn,r.v);if(done)done()})})};$("nok").onclick=go}
+function nickRun(){if(P.nick)return;LOCK=true;open('<h2>Willkommen im Dosen-Dex!</h2><p class="hint">Wähle deinen Spitznamen. Er steht in der Rangliste und im Profil. Rassistische, beleidigende oder unpassende Namen werden von der KI abgelehnt.</p>'+nameForm(true));wireName(true,function(){LOCK=false;_cs();prender();profSheet()})}
+function profSheet(){var G=got(),g=G.length,t=S.cans.filter(function(c){return c.name}).length,rated=G.filter(function(c){return c.rating}).length,photos=G.filter(function(c){return c.photo}).length,five=G.filter(function(c){return c.rating==5}).length,
+ B=[["1","Erste Dose",g>=1],["10","10 Sorten",g>=10],["30","30 Sorten",g>=30],["100%","Alle Sorten",t>0&&g>=t],["★","10 bewertet",rated>=10],["📷","10 Fotos",photos>=10],["5★","Fünf-Sterne-Dose",five>=1],["½","Halbzeit",g>=t/2&&t>0]],
+ pm=pmkey(),rk=(LB?lbRank(mkey()).map(function(x){return x.id}).indexOf(UID):-1),
+ top=Object.keys(P.lbc||{}).filter(function(k){return P.lbc[k]>0}).length;
+ var nm=P.nick||"Du";
+ open('<div class="tk0">'+avHtml(P.av,nm,96)+'<b class="pfn">@'+esc(nm)+vbF(UID)+'</b><div class="hint">'+(P.nickV?"Name geprüft":"Name noch nicht geprüft")+'</div>'+(P.bio?'<p class="bio">'+esc(P.bio)+'</p>':'')+'<div class="tkr"><div><b>'+(P.pts||0)+'</b><small>Punkte</small></div><div><b>'+(P.gems||0)+'</b><small>Juwelen</small></div><div><b>'+curStreak()+'</b><small>Tage Serie</small></div></div><button class="btn pri" id="pedit">Profil bearbeiten</button></div>'+
+ '<div id="pe" style="display:none"><b>Profilbild</b><div class="rcb" style="flex-direction:row"><label class="btn">📷 Foto<input type="file" accept="image/*" capture="user" class="pav" hidden></label><label class="btn">🖼 Galerie<input type="file" accept="image/*" class="pav" hidden></label>'+(P.av?'<button class="btn" id="pdel">Entfernen</button>':'')+'</div><p class="hint" id="avm"></p><b>Name</b>'+nameForm(false)+'<b>Bio</b><textarea id="bio" rows="3" maxlength="200" placeholder="Schreib etwas über dich (max. 20 Wörter)">'+esc(P.bio||"")+'</textarea><div class="hint" id="bioc">'+wc(P.bio)+' / 20 Wörter</div><p class="hint" id="bm2"></p><div class="rcb"><button class="btn pri" id="biok">Bio speichern</button></div><b>Blauer Haken</b><div class="rcb">'+(VER[UID]?'<p class="hint">Du bist verifiziert.</p>':'<button class="btn" id="pver">✔ Blauen Haken beantragen</button>')+(ISOWNER?'<button class="btn" id="pown">🛡 Anträge prüfen</button>':'')+'</div></div>'+
+ '<div class="sg"><div><span>'+(P.pts||0)+'</span><small>Punkte</small></div><div><span>'+(P.gems||0)+'</span><small>Juwelen</small></div><div><span>'+curStreak()+'</span><small>Tage Serie</small></div><div><span>'+g+'/'+t+'</span><small>Sorten gesammelt</small></div><div><span>'+(P.qd||[]).length+'</span><small>Quests geschafft</small></div><div><span>'+(P.vch||[]).length+'</span><small>Gutscheine gekauft</small></div><div><span>'+(rk>=0?rk+1:"–")+'</span><small>Rang diesen Monat</small></div><div><span>'+top+'</span><small>Platzierungen</small></div></div>'+
+ '<b>Favoriten</b><div class="favl">'+(S.cans.filter(function(c){return c.fav&&c.name}).length?S.cans.filter(function(c){return c.fav&&c.name}).map(function(c){return row(c)}).join(""):'<p class="hint">Noch keine Favoriten. Tippe in den Details einer Dose auf „Als Favorit markieren".</p>')+'</div>'+
+ '<b>Erfolge</b><div class="bd">'+B.map(function(x){return'<div class="badge'+(x[2]?"":" off")+'"><b>'+x[0]+'</b>'+x[1]+'</div>'}).join("")+'</div>'+
+ '<b>Sprache</b><div class="rcb" style="flex-direction:row"><button class="btn'+(LANG=="de"?" pri":"")+'" data-l="de">Deutsch</button><button class="btn'+(LANG=="en"?" pri":"")+'" data-l="en">English</button><button class="btn'+(LANG=="fr"?" pri":"")+'" data-l="fr">Français</button></div>'+
+ '<button class="btn" id="cl">Schließen</button>');
+ $("cl").onclick=closeSheet;$("pedit").onclick=function(){var e=$("pe");e.style.display=e.style.display=="none"?"block":"none"};var pd=$("pdel");if(pd)pd.onclick=function(){P.av="";P.avV=false;psave();lbPush();accUpd();profSheet()};wireName(false,function(){profSheet()});var pv=$("pver");if(pv)pv.onclick=vSheet;var po=$("pown");if(po)po.onclick=ownerSheet;
+ [].forEach.call(document.querySelectorAll("#card [data-l]"),function(b){b.onclick=function(){setLang(this.dataset.l);profSheet()}});
+ [].forEach.call(document.querySelectorAll("#card .favl .row"),function(b){b.onclick=function(){detail(+this.dataset.id)}});
+ if(P.nick&&!P.nickV&&!window.__vn){window.__vn=1;modName(P.nick).then(function(r){if(r.ok&&r.v){saveName(P.nick,true);profSheet()}else if(!r.ok){P.nick="";P.nickV=false;psave();firstRun()}})}
+ tr($("card"))}
+
+/* Alter und Geburtstag */
+function ageOf(bd,now){var p=bd.split("-").map(Number),n=now||new Date(),a=n.getFullYear()-p[0];if(n.getMonth()+1<p[1]||(n.getMonth()+1==p[1]&&n.getDate()<p[2]))a--;return a}
+function isLeap(y){return y%4==0&&(y%100!=0||y%400==0)}
+function isBday(bd){var p=bd.split("-").map(Number),n=new Date(),m=n.getMonth()+1,d=n.getDate();if(p[1]==2&&p[2]==29&&!isLeap(n.getFullYear()))return m==2&&d==28;return p[1]==m&&p[2]==d}
+function blockSheet(){LOCK=true;open('<h2>Leider zu jung</h2><p class="hint">Der Dosen-Dex ist erst ab 12 Jahren. Bitte komm wieder, wenn du alt genug bist.</p>')}
+function ageSheet(){LOCK=true;var td=dkey(Date.now());open('<h2>Wie alt bist du?</h2><p class="hint">Der Dosen-Dex ist ab 12 Jahren. Gib dein Geburtsdatum ein. Es ist nur für dich sichtbar, wird nur zur Alterskontrolle und für dein Geburtstagsgeschenk genutzt und kann später nicht geändert werden. Am Geburtstag gibt es 5 💎.</p><input type="date" id="bdi" max="'+td+'" min="1920-01-01"><p class="hint" id="bdm"></p><div class="rcb"><button class="btn pri" id="bdok">Weiter</button></div>');
+ $("bdok").onclick=function(){var v=$("bdi").value,m=$("bdm");if(!/^\d{4}-\d\d-\d\d$/.test(v)||v>td||v<"1920-01-01"){m.textContent="Bitte gib ein gültiges Geburtsdatum ein.";tr(m);return}
+  if(ageOf(v)<12){P.blk=true;psave();if(DB)cloudPush();blockSheet();return}
+  P.bd=v;psave();if(DB)cloudPush();LOCK=false;_cs();firstRun()};tr($("card"))}
+function bdCheck(){if(!P.bd||P.blk)return;var y=new Date().getFullYear();if(isBday(P.bd)&&P.bdy!==y){P.bdy=y;P.gems=(P.gems||0)+5;P.hist=P.hist||[];P.hist.unshift({n:"Geburtstagsgeschenk",t:Date.now(),p:0});psave();if(DB)cloudPush();prender();var a=ageOf(P.bd);open('<h2>🎂 Alles Gute!</h2><p>Herzlichen Glückwunsch zum '+a+'. Geburtstag! Als Geschenk bekommst du 5 💎.</p><button class="btn pri" id="cl">Danke</button>');$("cl").onclick=closeSheet;tr($("card"))}}
+function firstRun(){if(P.blk)return blockSheet();if(!P.bd)return ageSheet();if(!P.nick)return nickRun();bdCheck()}
+var frT=0;function frWait(){if(DB||frT++>14)firstRun();else setTimeout(frWait,250)}setTimeout(frWait,300);
+$("pgt").onclick=function(e){var b=e.target.closest("[data-pg]");if(b)goPg(+b.dataset.pg)};
+$("pg").addEventListener("scroll",function(){var i=Math.round(this.scrollLeft/this.clientWidth);[].forEach.call($("pgt").children,function(b,k){b.classList.toggle("on",k==i)})});
+var OFF=[["Lidl","0,75 € pro Dose, nur mit Lidl Plus App (sonst 1,59 €)",0.75,"","2026-10-12"],["Netto","0,88 € pro Dose, statt 1,59 €",0.88,"2026-10-31",""],["REWE","0,99 € pro Dose",0.99,"2026-10-31","2026-10-26"],["Edeka","0,99 € pro Dose",0.99,"2026-11-07","2026-11-02"],["E center","0,99 € pro Dose, statt 1,59 €",0.99,"2026-11-07","2026-11-02"],["Kaufland","10er-Pack für 7,77 €",0.777,"2026-08-05",""]];
+var OFFINFO={asOf:"2026-10-31",ai:false};
+function isD(s){return/^\d{4}-\d\d-\d\d$/.test(s||"")}
+function loadOffers(){DB.doc("offers/current").get().then(function(s){var d=s.exists&&s.data();if(!d||!Array.isArray(d.items))return;
+ var L=d.items.filter(function(x){return x&&typeof x.n=="string"&&typeof x.p=="number"&&x.p>0&&x.p<10}).slice(0,20).map(function(x){return[x.n.slice(0,30),String(x.d||"").slice(0,120),x.p,isD(x.u)?x.u:"",isD(x.f)?x.f:""]});
+ if(!L.length)return;OFF=L;OFFINFO={asOf:isD(d.asOf)?d.asOf:OFFINFO.asOf,ai:true};roffers()}).catch(function(){})}
+function loadHome(){if($("plz").value.trim())return;DB.doc("settings/home").get().then(function(s){var d=s.exists&&s.data();if(d&&typeof d.loc=="string"&&!$("plz").value.trim()){$("plz").value=d.loc.slice(0,40).replace(/[<>"]/g,"");setl()}}).catch(function(){})}
+function eur(x){return x.toFixed(2).replace(".",",")+" €"}
+function dmy(s){return s.split("-").reverse().join(".")}
+function roffers(){var p=$("plz")?$("plz").value.trim():"",now=new Date().toISOString().slice(0,10),
+ L=OFF.map(function(o){return{o:o,st:o[4]&&o[4]>now?1:(o[3]&&o[3]<now?2:0)}}).sort(function(a,b){return a.st-b.st||a.o[2]-b.o[2]});
+ $("ofr").innerHTML='<b>Angebote pro Dose</b><p class="hint">Stand '+dmy(OFFINFO.asOf)+(OFFINFO.ai?', von der KI aus aktuellen Prospekten aktualisiert. ':', aus Prospekten. ')+'Aktuell gültige Angebote stehen oben, alle Preise mit 0,25 € Pfand pro Dose. Je nach Markt können Preise abweichen.</p>'+L.map(function(x){var o=x.o,tx=x.st==1?'Gültig ab '+dmy(o[4])+(o[3]?' bis '+dmy(o[3]):''):x.st==2?'Abgelaufen am '+dmy(o[3]):(o[3]?'Gültig bis '+dmy(o[3]):'Seit '+dmy(o[4])+', Ende nicht bekannt');return'<div class="of"'+(x.st==2?' style="opacity:.5"':'')+'>'+chIco(o[0])+'<div style="flex:1;min-width:0"><b>'+o[0]+'</b><br><small class="hint">'+o[1]+'<br>'+tx+'</small></div><div class="op"><b>'+eur(o[2]+0.25)+'</b><small class="hint">mit Pfand, '+eur(o[2])+' ohne</small></div></div>'}).join("")}
+function fixData(o){var c=Array.isArray(o&&o.cans)?o.cans:null;if(!c)return null;var id=0;c=c.filter(function(x){return x&&typeof x=="object"}).map(function(x){return{id:id++,name:String(x.name||"").slice(0,80),got:!!x.got,rating:Math.max(0,Math.min(5,+x.rating||0)),note:String(x.note||"").slice(0,500),photo:/^data:image\//.test(x.photo||"")?x.photo:"",code:String(x.code||"").slice(0,200),date:String(x.date||"").slice(0,20),price:+x.price>0&&+x.price<100?+x.price:0,wish:!!x.wish,fav:!!x.fav}});var q=o.P&&typeof o.P=="object"?o.P:{};return{cans:c,P:{pts:Math.max(0,+q.pts||0),red:Math.max(0,+q.red||0),gems:Math.max(0,+q.gems||0),vch:Array.isArray(q.vch)?q.vch.slice(0,30):[],vday:String(q.vday||"").slice(0,10),dc:q.dc&&typeof q.dc=="object"?{d:String(q.dc.d||""),n:+q.dc.n||0}:null,prem:+q.prem||0,pmg:!!q.pmg,th:/^(neon|blau|lila|rot|orange|pink)$/.test(q.th)?q.th:"neon",ev:q.ev!==false,cf:q.cf&&typeof q.cf=="object"?{d:String(q.cf.d||""),n:Math.max(0,Math.min(50,+q.cf.n||0)),h:q.cf.h&&typeof q.cf.h=="object"?q.cf.h:{}}:null,q:q.q&&typeof q.q=="object"?{d:String(q.q.d||""),n:Array.isArray(q.q.n)?q.q.n.slice(0,3).map(function(x){return String(x).slice(0,80)}):null,done:Array.isArray(q.q.done)?q.q.done.slice(0,3).map(Boolean):[],h:Array.isArray(q.q.h)?q.q.h.slice(0,3).map(String):[]}:null,rc:q.rc&&typeof q.rc=="object"?q.rc:{},nickV:!!q.nickV,bio:String(q.bio||"").slice(0,200),bioV:!!q.bioV,bd:/^\d{4}-\d\d-\d\d$/.test(q.bd||"")?q.bd:"",bdy:+q.bdy||0,blk:!!q.blk,nickC:!!q.nickC,avV:!!q.avV,av:(typeof q.av=="string"&&/^data:image\/jpeg/.test(q.av)&&q.av.length<30000)?q.av:"",mpm:q.mpm&&typeof q.mpm=="object"?q.mpm:{},lp:+q.lp>=0?+q.lp:null,nick:String(q.nick||"").slice(0,20),lbc:q.lbc&&typeof q.lbc=="object"?q.lbc:{},qd:Array.isArray(q.qd)?q.qd.slice(-200).map(function(x){return String(x).slice(0,80)}):[],rcCur:String(q.rcCur||"").slice(0,80),streak:Math.max(0,+q.streak||0),lastDay:/^\d{4}-\d\d-\d\d$/.test(q.lastDay||"")?q.lastDay:"",last:null,hist:Array.isArray(q.hist)?q.hist.slice(0,50):[]},plz:String(o.plz||"").slice(0,40).replace(/[<>"]/g,"")}}
+function rbk(){$("bk").innerHTML='<b>Sicherung</b><p class="hint">Deine Sammlung und Punkte liegen in diesem Browser. Mit der Sicherung holst du sie nach dem Löschen des Browserspeichers zurück oder überträgst sie auf ein anderes Handy.</p><button class="btn pri" id="bk1">Sicherung kopieren</button><button class="btn" id="bk2">Sicherung einfügen</button><button class="btn" id="bk3">Aus Cloud laden</button><p class="hint" id="cm">Automatische Sicherung wird geprüft…</p><p class="hint" id="bkm"></p>';
+ $("bk1").onclick=function(){var t=JSON.stringify({v:1,cans:S.cans,P:Object.assign({},P,{sp:null}),plz:$("plz").value});
+  var fb=function(){open('<h2>Sicherung kopieren</h2><p class="hint">Halte den Text gedrückt, wähle Alles auswählen und kopiere ihn. Speichere ihn in einer Notiz.</p><textarea id="bt" rows="8" readonly></textarea><button class="btn" id="cl">Schließen</button>');$("bt").value=t;$("cl").onclick=closeSheet};
+  try{navigator.clipboard.writeText(t).then(function(){$("bkm").textContent="Kopiert. Füge den Text in eine Notiz oder Nachricht an dich selbst ein."}).catch(fb)}catch(e){fb()}};
+ $("bk2").onclick=function(){open('<h2>Sicherung einfügen</h2><p class="hint">Das ersetzt deine aktuelle Sammlung und deine Punkte.</p><textarea id="bt" rows="8" placeholder="Gesicherten Text hier einfügen"></textarea><p class="hint" id="bm"></p><button class="btn pri" id="ok">Laden</button><button class="btn" id="cl">Abbrechen</button>');
+  $("cl").onclick=closeSheet;
+  $("ok").onclick=function(){var d=null;try{d=fixData(JSON.parse($("bt").value))}catch(e){}
+   if(!d||!d.cans.length){$("bm").textContent="Das ist keine gültige Sicherung. Kopiere den ganzen Text noch einmal.";return}
+   S.cans=d.cans;P=d.P;if(d.plz){$("plz").value=d.plz;try{localStorage.setItem("dd_plz",d.plz)}catch(e){}}
+   ensure();save();psave();render();setl();closeSheet();$("bkm").textContent="Sicherung geladen."}}}
+function idb(cb){try{var r=indexedDB.open("dosendex",1);r.onupgradeneeded=function(){r.result.createObjectStore("kv")};r.onsuccess=function(){cb(r.result)}}catch(e){}}
+function mirror(){idb(function(d){try{d.transaction("kv","readwrite").objectStore("kv").put(JSON.stringify({cans:S.cans,P:P}),"all")}catch(e){}})}
+function restore(){idb(function(d){try{var g=d.transaction("kv").objectStore("kv").get("all");g.onsuccess=function(){if(!g.result||got().length||P.pts)return;var o=null;try{o=fixData(JSON.parse(g.result))}catch(e){}if(o&&(o.cans.some(function(c){return c.got})||o.P.pts)){S.cans=o.cans;P=o.P;ensure();save();psave();render()}}}catch(e){}})}
+var DB=null,UID=null,syncT=null,syncPh={};
+function cp(k){return"data/users/"+UID+"/"+k}
+function cmsg(t){var m=$("cm");if(m)m.textContent=t}
+function sigOf(s){return s.length+":"+s.slice(-24)}
+function localFresh(){return!got().length&&!P.pts}
+function cloudGet(){return DB.doc(cp("main")).get().then(function(s){return s.exists?s.data():null})}
+function applyCloud(d){var o=fixData({cans:d.cans,P:d.P,plz:d.plz});if(!o||!o.cans.length)return;S.cans=o.cans;P=o.P;
+ if(o.plz){$("plz").value=o.plz;try{localStorage.setItem("dd_plz",o.plz)}catch(e){}}
+ ensure();save();psave();render();setl();
+ (Array.isArray(d.ph)?d.ph:[]).forEach(function(i){if(typeof i!="number")return;DB.doc(cp("ph"+i)).get().then(function(s){var x=s.exists&&s.data();if(x&&/^data:image\//.test(x.p||"")&&S.cans[i]){S.cans[i].photo=x.p;syncPh[i]=sigOf(x.p);save();render()}}).catch(function(){})});
+ cmsg("Aus der Cloud geladen.")}
+function cloudPush(){if(!DB)return;clearTimeout(syncT);syncT=setTimeout(doPush,2000)}
+function doPush(){var cans=S.cans.map(function(c){var x={};for(var k in c)if(k!="photo")x[k]=c[k];return x}),ph=[];
+ S.cans.forEach(function(c,i){if(!c.photo)return;ph.push(i);var sg=sigOf(c.photo);if(syncPh[i]!==sg)DB.doc(cp("ph"+i)).set({p:c.photo}).then(function(){syncPh[i]=sg}).catch(function(){})});
+ DB.doc(cp("main")).set({cans:cans,P:{pts:P.pts,red:P.red,streak:P.streak||0,nickV:!!P.nickV,bio:P.bio||"",bioV:!!P.bioV,bd:P.bd||"",bdy:P.bdy||0,blk:!!P.blk,nickC:!!P.nickC,avV:!!P.avV,av:P.av||"",mpm:P.mpm||{},lp:P.lp==null?null:P.lp,nick:P.nick||"",lbc:P.lbc||{},qd:(P.qd||[]).slice(-200),rc:P.rc||{},rcCur:P.rcCur||"",q:P.q||null,gems:P.gems||0,vch:P.vch||[],vday:P.vday||"",dc:P.dc||null,prem:P.prem||0,pmg:!!P.pmg,cf:P.cf||null,th:P.th||"neon",ev:P.ev!==false,lastDay:P.lastDay||"",hist:(P.hist||[]).slice(0,50)},plz:$("plz").value,ph:ph,t:Date.now()}).then(function(){cmsg("Automatisch gesichert um "+new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})+" Uhr.")}).catch(function(e){cmsg("Die automatische Sicherung hat nicht geklappt ("+(e&&e.code||"Fehler")+"). Nutze die Sicherung per Text.")})}
+function cloudInit(){if(!(window.claude&&window.claude.use))return;
+ Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){var db=r[0],u=r[1];if(!db||!u||!u.id)return;
+  return u.id().then(function(id){if(!id)return;DB=db;UID=id;try{ISOWNER=!!(u.isOwner&&u.isOwner())}catch(e){}loadOffers();loadHome();lbLoad();claimOwn();
+   return cloudGet().then(function(d){if(d&&localFresh())applyCloud(d);else{cmsg("Automatische Sicherung ist an.");cloudPush()}})})}).catch(function(){})}
+function wireCloud(){var b=$("bk3");if(!b)return;b.onclick=function(){
+ if(!DB){cmsg("Die automatische Sicherung ist hier nicht verfügbar. Nutze die Sicherung per Text.");return}
+ cloudGet().then(function(d){if(!d){cmsg("In der Cloud liegt noch nichts.");return}
+  open('<h2>Aus der Cloud laden</h2><p class="hint">Das ersetzt deine aktuelle Sammlung und deine Punkte durch den Stand der letzten Sicherung.</p><button class="btn pri" id="ok">Laden</button><button class="btn" id="cl">Abbrechen</button>');
+  $("cl").onclick=closeSheet;$("ok").onclick=function(){closeSheet();applyCloud(d)}}).catch(function(){cmsg("Laden hat nicht geklappt.")})}}
+var _sv=save;save=function(){_sv();mirror();cloudPush()};var _ps=psave;psave=function(){_ps();mirror();cloudPush()};
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+pload();load();ensure();render();prl();rbk();wireCloud();roffers();restore();cloudInit();
+$("svb").onclick=function(){var b=this;try{save();psave();mirror();if(DB)doPush()}catch(e){}b.textContent="✓ Gespeichert";setTimeout(function(){b.textContent="💾 Speichern"},1600)};
+
+/* Premium + Tageslimit */
+var FREE_N=3;
+function isPrem(){return (P.prem||0)>Date.now()}
+function todayN(){var t=dkey(Date.now());return P.dc&&P.dc.d==t?P.dc.n:0}
+function allGot(){var a=S.cans.filter(function(c){return c&&c.name});return a.length>0&&a.every(function(c){return c.got})}
+function premLimit(){open('<h2>Heute sind 3 Dosen geschafft</h2><p>Ohne Premium kannst du am Tag 3 Monster scannen. Morgen geht es weiter. Mit Premium scannst du unbegrenzt.</p><button class="btn pri" id="pl">Premium ansehen</button><button class="btn" id="cl">OK</button>');$("cl").onclick=closeSheet;$("pl").onclick=function(){closeSheet();goPg(3)}}
+var _shP=scanHome;scanHome=function(){if(!isPrem()&&todayN()>=FREE_N)return premLimit();return _shP()};$("scan").onclick=scanHome;
+var _srP=srender;srender=function(){_srP();var el=document.querySelector("#p4 .pr.bal");if(!el)return;var d=document.createElement("div");d.className="pr premc";
+ var on=isPrem(),h='<div class="ofh"><span class="oft">👑</span><div><b>Dosen-Dex Premium</b><div class="hint">'+(on?'Aktiv bis '+new Date(P.prem).toLocaleDateString("de-DE"):'Unbegrenzt Dosen scannen')+'</div></div></div>';
+ h+='<p class="hint">Ohne Premium sind es 3 gescannte Dosen pro Tag (heute '+Math.min(todayN(),FREE_N)+' von '+FREE_N+'). Mit Premium gibt es kein Tageslimit für Fotos. Die Punkte pro Tag bleiben bei höchstens 10 Dosen.</p>';
+ h+='<p class="hint">🎁 Hast du alle Monster gescannt, bekommst du einmalig 1 Monat Premium gratis'+(P.pmg?' (schon erhalten)':'')+'.</p>';
+ h+='<button class="btn pri" id="pmb">Premium für 11,99 €</button>';d.innerHTML=h;el.parentNode.insertBefore(d,el.nextSibling);
+ $("pmb").onclick=function(){open('<h2>Nur Vorschau</h2><p>Der Kauf von Premium ist hier nicht möglich. Es wurde nichts abgebucht. Einen Gratis-Monat bekommst du, wenn du alle Monster gescannt hast.</p><button class="btn pri" id="cl">OK</button>');$("cl").onclick=closeSheet}};
+var _prP=prender;prender=function(){if(!P.pmg&&allGot()){P.pmg=true;P.prem=Math.max(Date.now(),P.prem||0)+30*864e5;psave();_prP();open('<h2>👑 Alle Monster gesammelt!</h2><p>Du bekommst 1 Monat Premium gratis. Du kannst jetzt unbegrenzt Dosen scannen.</p><button class="btn pri" id="cl">Mega</button>');$("cl").onclick=closeSheet;return}_prP()};
+
+function fitPg(){var g=$("pg");if(!g||!g.clientWidth)return;var i=Math.round(g.scrollLeft/g.clientWidth),c=g.children[i];if(c){var h=c.offsetHeight;if(h&&Math.abs(g.offsetHeight-h)>1)g.style.height=h+"px"}}
+$("pg").addEventListener("scroll",fitPg,{passive:true});window.addEventListener("resize",fitPg);setInterval(fitPg,300);fitPg();
+
+/* Nützliches: Koffein, Pfand, Zufallsdose */
+function ageNow(){if(!P.bd)return 18;var b=new Date(P.bd),n=new Date(),a=n.getFullYear()-b.getFullYear();if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a}
+function cfGet(){var t=dkey(Date.now());if(!P.cf||typeof P.cf!="object")P.cf={d:t,n:0,h:{}};if(!P.cf.h)P.cf.h={};if(P.cf.d!=t){P.cf.h[P.cf.d]=P.cf.n;var k=Object.keys(P.cf.h).sort();while(k.length>14)delete P.cf.h[k.shift()];P.cf={d:t,n:0,h:P.cf.h}}return P.cf}
+function toolsHtml(){var c=cfGet(),lim=ageNow()<18?100:400,mg=c.n*160,pc=Math.min(100,Math.round(mg/lim*100)),over=mg>lim;
+ var got=S.cans.filter(function(x){return x.name&&x.got}).length,miss=S.cans.filter(function(x){return x.name&&!x.got});
+ var wk=[];for(var i=6;i>=0;i--){var k=dkey(Date.now()-i*864e5),v=k==c.d?c.n:(c.h[k]||0);wk.push(v)}var mx=Math.max(3,Math.max.apply(null,wk));
+ var bars=wk.map(function(v){return'<i style="height:'+Math.max(4,Math.round(v/mx*40))+'px"></i>'}).join("");
+ var h='<div class="pr tl"><div class="ofh"><span class="oft">☕</span><div><b>Koffein heute</b><div class="hint">Zählt nur für dich, keine Punkte</div></div></div>'
+ +'<div class="cfm"><div class="cfb"><i style="width:'+pc+'%;background:'+(over?'#ff4d4d':pc>75?'#ffb020':'var(--ac)')+'"></i></div><div class="hint">'+mg+' mg von '+lim+' mg ('+c.n+' Dose'+(c.n==1?'':'n')+' à 500 ml, etwa 160 mg)</div></div>'
+ +'<div class="rcb"><button class="btn" id="cfm">− 1</button><button class="btn pri" id="cfp">+ 1 Dose getrunken</button></div>'
+ +(over?'<p class="hint" style="color:#ff8080">Das ist über dem Richtwert für heute. Trink Wasser und lass die nächste Dose ausfallen.</p>':'')
+ +'<div class="wk">'+bars+'</div><div class="hint">Letzte 7 Tage</div>'
+ +'<p class="hint">Richtwert: bis 400 mg Koffein am Tag für gesunde Erwachsene, für unter 18 grob 100 mg. Schwangere, Kinder und Menschen mit Herzproblemen sollten Energy Drinks meiden. Das ist keine ärztliche Beratung.</p></div>'
+ +'<div class="pr tl"><div class="ofh"><span class="oft">♻️</span><div><b>Pfand-Rechner</b><div class="hint">0,25 € pro Dose</div></div></div><p style="margin:6px 0"><b style="font-size:22px;color:var(--ac)">'+eur(got*0.25)+'</b> <span class="hint">Pfand in '+got+' gesammelten Dosen. Vergiss nicht, sie zurückzugeben.</span></p></div>'
+ +'<div class="pr tl"><div class="ofh"><span class="oft">🎲</span><div><b>Zufallsdose</b><div class="hint">Was soll ich als Nächstes suchen?</div></div></div><button class="btn pri" id="rnd"'+(miss.length?'':' disabled')+'>Zeig mir eine fehlende Sorte</button><p class="hint" id="rndo">'+(miss.length?miss.length+' Sorten fehlen noch.':'Du hast alle Sorten!')+'</p></div>';
+ return h}
+function toolsBind(){var c=cfGet(),f=function(d){c.n=Math.max(0,Math.min(50,c.n+d));psave();prender()};var a=$("cfp"),b=$("cfm"),r=$("rnd");if(a)a.onclick=function(){f(1)};if(b)b.onclick=function(){f(-1)};
+ if(r)r.onclick=function(){var m=S.cans.filter(function(x){return x.name&&!x.got});if(!m.length)return;var x=m[Math.floor(Math.random()*m.length)];$("rndo").innerHTML='<span class="chi" style="display:inline-grid;vertical-align:middle;width:26px;height:26px;border-radius:8px;background:'+col(x.name)+'"></span> <b style="color:var(--tx)">'+esc(x.name)+'</b>'}}
+var _prT=prender;prender=function(){_prT();var p=$("p2");if(!p)return;var d=$("tools");if(!d){d=document.createElement("div");d.id="tools";p.appendChild(d)}if(!(d.contains(document.activeElement)))d.innerHTML=toolsHtml();toolsBind()};
+
+/* Design-Farben + Events */
+var THEMES={neon:["Neon-Grün","#8dff1f","#a6ff4d","#6fd400","141,255,31","#1d3a0b","#2a5a0f"],blau:["Blau","#3db8ff","#7fd2ff","#0a8fe0","61,184,255","#0d2a45","#10406b"],lila:["Lila","#b366ff","#cc99ff","#8a2be2","179,102,255","#2a0f45","#3f1a6b"],rot:["Rot","#ff4d4d","#ff8080","#e01f1f","255,77,77","#451010","#6b1818"],orange:["Orange","#ff9a1f","#ffb85c","#e07800","255,154,31","#452a0d","#6b400f"],pink:["Pink","#ff5ec4","#ff94d9","#e0239a","255,94,196","#45102f","#6b1a4a"]};
+var EVT={hal:["Halloween","🎃","#ff8a00","#ffa94d","#d96a00","255,138,0","#2a0f45","#3f1a6b"," 🎃🦇"],xmas:["Weihnachten","🎄","#ff4d4d","#ff8080","#d62020","255,77,77","#0f3a1a","#17562a"," 🎄❄️"],ny:["Silvester","🎆","#ffd23d","#ffe27a","#e0a800","255,210,61","#1a1a45","#2a2a6b"," 🎆🥂"]};
+function curEvent(){var d=new Date(),m=d.getMonth()+1,t=d.getDate();if((m==10&&t>=20)||(m==11&&t<=2))return"hal";if(m==12&&t>=1&&t<=27)return"xmas";if((m==12&&t>=28)||(m==1&&t<=2))return"ny";return""}
+function applyTheme(){var r=document.documentElement.style,e=P.ev!==false?curEvent():"",v;if(e){v=EVT[e];r.setProperty("--ac",v[2]);r.setProperty("--ac2",v[3]);r.setProperty("--ac3",v[4]);r.setProperty("--acr",v[5]);r.setProperty("--bg1",v[6]);r.setProperty("--bg2",v[7]);r.setProperty("--evi",'"'+v[8]+'"')}else{v=THEMES[P.th]||THEMES.neon;r.setProperty("--ac",v[1]);r.setProperty("--ac2",v[2]);r.setProperty("--ac3",v[3]);r.setProperty("--acr",v[4]);r.setProperty("--bg1",v[5]);r.setProperty("--bg2",v[6]);r.setProperty("--evi",'""')}}
+function themeHtml(){var e=curEvent(),h='<h3 class="shh"><span>Farben</span></h3><div class="pr tl"><div class="ofh"><span class="oft">🎨</span><div><b>Deine Farbe</b><div class="hint">Tippe eine Farbe, die ganze App wechselt sie</div></div></div><div class="swg">';
+ Object.keys(THEMES).forEach(function(k){var v=THEMES[k],on=(P.th||"neon")==k&&!(P.ev!==false&&e);h+='<button class="swc'+(on?" on":"")+'" data-t="'+k+'" style="--c1:'+v[2]+';--c2:'+v[3]+'"><span class="sws"></span><span>'+v[0]+(on?' ✓':'')+'</span></button>'});
+ h+='</div></div><div class="pr tl"><div class="tg"><div><b>Aktuelle Events</b><div class="hint">'+(e&&P.ev!==false?EVT[e][0]+' ist gerade aktiv und ersetzt deine Farbe.':e?EVT[e][0]+' läuft gerade, ist aber ausgeschaltet.':'Gerade läuft kein Event.')+'</div></div><button class="tgb'+(P.ev!==false?" on":"")+'" id="evt" aria-label="Events"><i></i></button></div><div class="evl">';
+ [["hal","20. Okt. bis 2. Nov."],["xmas","1. bis 27. Dez."],["ny","28. Dez. bis 2. Jan."]].forEach(function(x){var v=EVT[x[0]];h+='<div class="evi'+(e==x[0]?" on":"")+'" style="--c1:'+v[3]+';--c2:'+v[4]+'"><span class="sws"></span><div><b>'+v[1]+' '+v[0]+'</b><div class="hint">'+x[1]+'</div></div></div>'});
+ h+='</div><p class="hint">Wenn du eine eigene Farbe wählst, schalten sich die Events aus. Schalte sie wieder an, um das Fest-Design zu sehen.</p></div>';return h}
+function themeBind(){[].forEach.call(document.querySelectorAll("#p5 .swc"),function(x){x.onclick=function(){P.th=this.dataset.t;P.ev=false;psave();applyTheme();prender()}});var b=$("evt");if(b)b.onclick=function(){P.ev=P.ev===false;psave();applyTheme();prender()}}
+var _prTh=prender;prender=function(){applyTheme();_prTh();var d=$("p5");if(d){d.innerHTML=themeHtml();themeBind()}};applyTheme();prender();
+
+/* Wunschliste im Shop */
+var _srW=srender;srender=function(){_srW();var el=document.querySelector("#p4 .pr.bal");if(!el)return;var W=S.cans.filter(function(c){return c.wish&&!c.got&&c.name}),d=document.createElement("div");d.className="pr wlc";
+ d.innerHTML='<div class="ofh"><span class="oft">💚</span><div><b>Wunschliste</b><div class="hint">'+(W.length?W.length+(W.length==1?' Sorte':' Sorten')+' möchtest du noch finden':'Sorten, die du noch suchst')+'</div></div></div>'+(W.length?W.map(function(c){return row(c)}).join(""):'<p class="hint">Noch leer. Öffne in der Sammlung eine fehlende Dose und tippe auf „Auf die Wunschliste".</p>');
+ el.parentNode.insertBefore(d,el.nextSibling);[].forEach.call(d.querySelectorAll(".row"),function(b){b.onclick=function(){detail(+this.dataset.id)}})};
+</script>
+</body>
+</html>
